@@ -1,0 +1,43 @@
+{
+    "name": "homm/hommformviewer",
+    "description": "Show Form-Entries directly from DB",
+    "type": "craft-plugin",
+    "version": "1.0.0",
+    "keywords": [
+        "craft",
+        "cms",
+        "craftcms",
+        "craft-plugin",
+        "hommformviewer"
+    ],
+    "support": {
+        "docs": "???",
+        "issues": "???"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Domenik Hofer",
+            "homepage": "http://www.homm.ch"
+        }
+    ],
+    "require": {
+        "craftcms/cms": "^3.0.0-RC1"
+    },
+    "autoload": {
+        "psr-4": {
+          "homm\\hommformviewer\\": "src/"
+        }
+    },
+    "extra": {
+        "name": "hommformviewer",
+        "handle": "hommformviewer",
+        "hasCpSettings": true,
+        "hasCpSection": true,
+        "changelogUrl": "???",
+        "components": {
+            "hommformviewerService": "homm\\hommformviewer\\services\\HommformviewerService"
+        },
+        "class": "homm\\hommformviewer\\Hommformviewer"
+    }
+}

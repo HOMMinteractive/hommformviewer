@@ -1,0 +1,66 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * hommformviewer plugin for Craft CMS 3.x
+ *
+ * hommformviewer index.twig
+ *
+ * @author    Domenik Hofer
+ * @copyright Copyright (c) 2019 Domenik Hofer
+ * @link      http://www.homm.ch
+ * @package   Hommformviewer
+ * @since     1.0.0
+ */
+#}
+
+{% extends "_layouts/cp" %}
+{% import "_includes/forms" as forms %}
+
+{% do view.registerAssetBundle("homm\\hommformviewer\\assetbundles\\hommformviewer\\HommformviewerAsset") %}
+{% do view.registerAssetBundle("homm\\hommformviewer\\assetbundles\\indexcpsection\\IndexCPSectionAsset") %}
+
+{# Link for the ? icon at the bottom of the page #}
+{% set docsUrl = "???" %}
+
+{# The title of this CP section #}
+{% set title = "Form Viewer" %}
+
+{# The URL to this plugin's base CP section #}
+{% set pluginCpUrl = url('hommformviewer') %}
+
+{# Get a URL to an image in our AssetBundle #}
+{% set iconUrl = view.getAssetManager().getPublishedUrl('@homm/hommformviewer/assetbundles/indexcpsection/dist', true) ~ '/img/Index-icon.svg' %}
+
+{# Content that should appear in the page header#}
+{% block actionButton  %}
+    <div class="buttons">
+       <!-- <a href="{{ pluginCpUrl }}" class="btn submit add icon">{{ "Click Me!"|t('hommformviewer') }}</a>-->
+	 <a href="" class="btn submit hommformviewer_export">Als CSV exportieren</a>
+    </div>
+{% endblock %}
+
+{# The content of the CP Section#}
+{% set content %}
+
+{% set sidebar %}
+<nav class="hommformviewer_nav">
+<ul>
+{% for key,table in craft.hommformviewer.tables %}
+
+<li><a data-table="{{table}}"><span class="label">{{table}}</span></a></li>
+
+{# class="sel" #}
+
+{% endfor %}
+</ul>
+</nav>
+{% endset %}
+<!--<img width="50px" height="50px" src="{{view.getAssetManager().getPublishedUrl('@homm/hommformviewer/assetbundles/indexcpsection/dist', true) ~ '/img/loading.gif'}}" class="hommformviewer_loading">-->
+<table class="hommformviewer_table">
+
+</table>
+
+
+
+
+{% endset %}

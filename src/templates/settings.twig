@@ -1,0 +1,26 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * hommformviewer plugin for Craft CMS 3.x
+ *
+ * hommformviewer Settings.twig
+ *
+ * @author    Domenik Hofer
+ * @copyright Copyright (c) 2019 Domenik Hofer
+ * @link      http://www.homm.ch
+ * @package   Hommformviewer
+ * @since     1.0.0
+ */
+#}
+
+{% import "_includes/forms" as forms %}
+
+{% do view.registerAssetBundle("homm\\hommformviewer\\assetbundles\\hommformviewer\\HommformviewerAsset") %}
+
+{{ forms.textField({
+    label: 'Angezeigte Tabellen',
+    instructions: 'Mehrere Tabellen mit Komma trennen',
+    id: 'someAttribute',
+    name: 'someAttribute',
+    value: settings['someAttribute']})
+}}
