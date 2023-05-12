@@ -1,28 +1,36 @@
 {
     "name": "homm/hommformviewer",
-    "description": "Show Form-Entries directly from DB",
+    "description": "Show form requests in the control panel",
     "type": "craft-plugin",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "keywords": [
         "craft",
         "cms",
         "craftcms",
         "craft-plugin",
-        "hommformviewer"
+        "hommformviewer",
+        "form requests viewer"
     ],
     "support": {
-        "docs": "http://www.homm.ch",
-        "issues": "http://www.homm.ch"
+        "docs": "https://github.com/HOMMinteractive/hommformviewer/blob/master/README.md",
+        "issues": "https://github.com/HOMMinteractive/hommformviewer/issues"
     },
     "license": "MIT",
     "authors": [
         {
             "name": "Domenik Hofer",
-            "homepage": "http://www.homm.ch"
+            "homepage": "https://www.homm.ch"
+        },
+        {
+            "name": "Benjamin Ammann",
+            "homepage": "https://github.com/ammannbe"
         }
     ],
     "require": {
-        "craftcms/cms": "^3.0.0-RC1"
+        "php": "^8.0|^8.1",
+        "craftcms/cms": "^4.0.0",
+        "ext-json": "*",
+        "ext-fileinfo": "*"
     },
     "autoload": {
         "psr-4": {
@@ -30,14 +38,12 @@
         }
     },
     "extra": {
-        "name": "hommformviewer",
+        "name": "HOMM Form Viewer",
         "handle": "hommformviewer",
-        "hasCpSettings": true,
-        "hasCpSection": true,
-        "changelogUrl": "???",
-        "components": {
-            "hommformviewerService": "homm\\hommformviewer\\services\\HommformviewerService"
-        },
-        "class": "homm\\hommformviewer\\Hommformviewer"
+        "developer": "HOMM interactive",
+        "developerUrl": "https://github.com/HOMMinteractive",
+        "documentationUrl": "https://github.com/HOMMinteractive/hommformviewer/blob/master/README.md",
+        "changelogUrl": "https://raw.githubusercontent.com/HOMMinteractive/hommformviewer/master/CHANGELOG.md",
+        "class": "homm\\hommformviewer\\HOMMFormViewer"
     }
 }

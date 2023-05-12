@@ -1,18 +1,16 @@
 <?php
 /**
- * hommformviewer plugin for Craft CMS 3.x
+ * HOMMFormViewer plugin for Craft CMS 4.x
  *
- * Show Form-Entries directly from DB
+ * Show form requests in the control panel
  *
- * @link      http://www.homm.ch
- * @copyright Copyright (c) 2019 Domenik Hofer
+ * @link      https://github.com/HOMMinteractive
+ * @copyright Copyright (c) 2019 HOMM interactive
  */
 
 namespace homm\hommformviewer\models;
 
-use homm\hommformviewer\Hommformviewer;
 
-use Craft;
 use craft\base\Model;
 
 /**
@@ -26,7 +24,7 @@ use craft\base\Model;
  * https://craftcms.com/docs/plugins/models
  *
  * @author    Domenik Hofer
- * @package   Hommformviewer
+ * @package   HOMMFormViewer
  * @since     1.0.0
  */
 class Settings extends Model
@@ -35,11 +33,9 @@ class Settings extends Model
     // =========================================================================
 
     /**
-     * Some field model attribute
-     *
      * @var string
      */
-    public $someAttribute = '0_contact';
+    public string $table = '0_contact';
 
     // Public Methods
     // =========================================================================
@@ -54,11 +50,11 @@ class Settings extends Model
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
-            ['someAttribute', 'string'],
-            ['someAttribute', 'default', 'value' => '0_contact'],
+            ['table', 'string'],
+            ['table', 'default', 'value' => '0_contact'],
         ];
     }
 }

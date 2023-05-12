@@ -15,8 +15,8 @@
  */
 return [
     '{name} plugin loaded' => '{name} plugin loaded',
-    'Visible table' => 'Visible table',
-    'Form requests' => 'Form requests',
-    'Search' => 'Search',
-    'Export as CSV' => 'Export as CSV',
+    'Visible table' => 'Anzuzeigende Tabelle',
+    'Form requests' => 'Formular Anfragen',
+    'Search' => 'Suchen',
+    'Export as CSV' => 'Als CSV exportieren',
 ];

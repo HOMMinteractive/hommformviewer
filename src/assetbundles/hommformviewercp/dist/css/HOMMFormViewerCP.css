@@ -1,0 +1,38 @@
+/**
+ * hommformviewer plugin for Craft CMS
+ *
+ * Index Field CSS
+ *
+ * @author    Domenik Hofer
+ * @copyright Copyright (c) 2019 HOMM interactive
+ * @link      https://github.com/HOMMinteractive
+ * @package   HOMMFormViewer
+ * @since     1.0.0
+ */
+
+.hommformviewer__table {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.hommformviewer__table table {
+    width: 100%;
+}
+
+.hommformviewer__table table tr:not(:last-child) {
+    border-top: 1px solid var(--gray-100, hsl(212,50%,93%));
+    border-bottom: 1px solid var(--gray-100, hsl(212,50%,93%));
+}
+
+.hommformviewer__table tr:hover {
+    background-color: var(--gray-050, hsl(212,60%,97%));
+}
+
+.hommformviewer__table table th > .table-item,
+.hommformviewer__table table td > .table-item {
+    display: inline-block;
+    max-width: 300px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

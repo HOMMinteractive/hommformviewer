@@ -1,17 +1,17 @@
 <?php
 /**
- * hommformviewer plugin for Craft CMS 3.x
+ * HOMMFormViewer plugin for Craft CMS 4.x
  *
- * Show Form-Entries directly from DB
+ * Show form requests in the control panel
  *
- * @link      http://www.homm.ch
- * @copyright Copyright (c) 2019 Domenik Hofer
+ * @link      https://github.com/HOMMinteractive
+ * @copyright Copyright (c) 2019 HOMM interactive
  */
 
 /**
- * hommformviewer config.php
+ * HOMMFormViewer config.php
  *
- * This file exists only as a template for the hommformviewer settings.
+ * This file exists only as a template for the HOMMFormViewer settings.
  * It does nothing on its own.
  *
  * Don't edit this file, instead copy it to 'craft/config' as 'hommformviewer.php'
@@ -23,8 +23,5 @@
  */
 
 return [
-
-    // This controls blah blah blah
-    "someAttribute" => true,
-
+    'table' => '0_contact',
 ];
