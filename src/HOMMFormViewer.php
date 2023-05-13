@@ -46,17 +46,17 @@ class HOMMFormViewer extends Plugin
     /**
      * @var string
      */
-    public string $schemaVersion = '1.0.0';
+    public $schemaVersion = '1.0.0';
 
     /**
      * @var bool
      */
-    public bool $hasCpSettings = true;
+    public $hasCpSettings = true;
 
     /**
      * @var bool
      */
-    public bool $hasCpSection = true;
+    public $hasCpSection = true;
 
     // Public Methods
     // =========================================================================
