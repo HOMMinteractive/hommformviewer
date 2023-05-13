@@ -11,6 +11,10 @@ to [Semantic Versioning](http://semver.org/).
 - Refactoring whole code
 - Make the form viewer ready for the new DB structure
 
+## 1.1.0 - 2023-05-13
+
+- Craft CMS 3.x backwards compatibility from tag 2.0.0
+
 ## 1.0.0 - 2019-01-15
 
 ### Added
