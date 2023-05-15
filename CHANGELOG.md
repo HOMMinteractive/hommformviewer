@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres
 to [Semantic Versioning](http://semver.org/).
 
+## 2.0.2 - 2023-05-15
+
+- fixed \n & \r json decode errors
+
 ## 2.0.1 - 2023-05-15
 
 > **Warning**
@@ -15,6 +19,10 @@ to [Semantic Versioning](http://semver.org/).
 - Craft CMS 4.x ready
 - Refactoring whole code
 - Make the form viewer ready for the new DB structure
+
+## 1.1.2 - 2023-05-15
+
+- fixed \n & \r json decode errors
 
 ## 1.1.1 - 2023-05-15
 

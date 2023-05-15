@@ -47,27 +47,36 @@ class FormViewerService extends Component
 
     public function getData(string $form): array
     {
-        $head = [];
+        $head = ['id', 'date'];
         $body = [];
         $items = $this->query()->where(['formId' => $form])->all();
 
         foreach ($items as $key => $item) {
-            $payload = json_decode($item['payload'], true);
+            $payload = str_replace(["\r\n","\t"], [' ', ' '], $item['payload']);
+            $payload = json_decode($payload, true);
+
             unset($payload['recaptcha_response']);
             $head = array_merge($head, array_keys($payload));
         }
         $head = array_unique($head);
 
         foreach ($items as $key => $item) {
-            $payload = json_decode($item['payload'], true);
+            $payload = str_replace(["\r\n","\t"], [' ', ' '], $item['payload']);
+            $payload = json_decode($payload, true);
 
-            $row = [];
+            $row['id'] = $item['id'];
+            $row['date'] = $item['date'];
+
             foreach ($head as $i) {
+                if (in_array($i, ['id', 'date'])) {
+                    continue;
+                }
+
                 $row[$i] = $payload[$i] ?? '';
             }
             $body[] = $row;
         }
 
-        return mb_convert_encoding([$head, ...$body], 'ISO-8859-1', 'UTF-8');
+        return [$head, ...$body];
     }
 }

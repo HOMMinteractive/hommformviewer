@@ -30,6 +30,7 @@ class FormViewerController extends Controller
 
         $form = $request->getQueryParam('form');
         $data = HOMMFormViewer::$plugin->formViewerService->getData($form);
+        $data = mb_convert_encoding($data, 'ISO-8859-1', 'UTF-8');
 
         $csv = '';
         foreach ($data as $item) {
