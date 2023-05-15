@@ -77,6 +77,6 @@ class FormViewerService extends Component
             $body[] = $row;
         }
 
-        return [$head, ...$body];
+        return array_merge([$head], $body);
     }
 }

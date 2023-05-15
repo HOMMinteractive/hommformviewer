@@ -20,6 +20,10 @@ to [Semantic Versioning](http://semver.org/).
 - Refactoring whole code
 - Make the form viewer ready for the new DB structure
 
+## 1.1.2.1 - 2023-05-15
+
+- revert PHP 7.2.5 compatibility
+
 ## 1.1.2 - 2023-05-15
 
 - fixed \n & \r json decode errors
