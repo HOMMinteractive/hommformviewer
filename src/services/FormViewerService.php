@@ -52,7 +52,7 @@ class FormViewerService extends Component
         $items = $this->query()->where(['formId' => $form])->all();
 
         foreach ($items as $key => $item) {
-            $payload = str_replace(["\r\n","\t"], [' ', ' '], $item['payload']);
+            $payload = str_replace(["\r\n", "\n", "\t"], [' ', ' ', ' '], $item['payload']);
             $payload = json_decode($payload, true);
 
             unset($payload['recaptcha_response']);
@@ -61,7 +61,7 @@ class FormViewerService extends Component
         $head = array_unique($head);
 
         foreach ($items as $key => $item) {
-            $payload = str_replace(["\r\n","\t"], [' ', ' '], $item['payload']);
+            $payload = str_replace(["\r\n", "\n", "\t"], [' ', ' ', ' '], $item['payload']);
             $payload = json_decode($payload, true);
 
             $row['id'] = $item['id'];
