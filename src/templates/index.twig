@@ -29,7 +29,15 @@
     <input class="text search hommformviewer_search" placeholder="{{ 'Search'|t('hommformviewer') }}">
 
     <div class="buttons">
-	    <a href="{{ cpUrl('hommformviewer/export', { form: currentForm }) }}" class="btn submit">{{ 'Export as CSV'|t('hommformviewer') }}</a>
+        <a href="{{ cpUrl('hommformviewer/export', { form: currentForm }) }}" class="btn">{{ 'Export...'|t('hommformviewer') }}</a>
+        &nbsp;
+        <form action="{{ cpUrl('hommformviewer/delete') }}" method="post" onsubmit="return confirm('{{ 'Do you really want to delete this form and all its data?\\nThis action cannot be undone.'|t('hommformviewer') }}');">
+            {{ csrfInput() }}
+            {{ redirectInput('hommformviewer') }}
+
+            <input type="hidden" name="form" value="{{ currentForm }}">
+            <button class="btn submit">{{ 'Delete'|t('hommformviewer') }}</button>
+        </form>
     </div>
 {% endblock %}
 
