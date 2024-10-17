@@ -43,4 +43,15 @@ class FormViewerController extends Controller
 
         return Craft::$app->response->sendContentAsFile($csv, $form . '.csv', ['mimeType' => 'text/csv']);
     }
+
+    public function actionDelete()
+    {
+        $this->requirePostRequest();
+
+        $request = Craft::$app->getRequest();
+        $form = $request->getBodyParam('form');
+        HOMMFormViewer::$plugin->formViewerService->deleteData($form);
+
+        return $this->redirectToPostedUrl();
+    }
 }

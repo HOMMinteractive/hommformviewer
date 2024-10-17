@@ -79,4 +79,14 @@ class FormViewerService extends Component
 
         return [$head, ...$body];
     }
+
+    public function deleteData(string $form): bool
+    {
+        $table = HOMMFormViewer::$plugin->getSettings()->table;
+
+        return (new Query())
+            ->createCommand()
+            ->delete($table, ['formId' => $form])
+            ->execute();
+    }
 }
