@@ -33,10 +33,14 @@ class FormViewerController extends Controller
         $data = mb_convert_encoding($data, 'ISO-8859-1', 'UTF-8');
 
         $csv = '';
-        foreach ($data as $item) {
-            $csv .= implode(';', $item) . PHP_EOL;
+        foreach ($data as $key => $row) {
+            if ($key === array_key_first($data)) {
+                $csv .= implode(';', $row) . PHP_EOL;
+            } else {
+                $csv .= '"' . implode('";"', $row) . '"' . PHP_EOL;
+            }
         }
 
-        return Craft::$app->response->sendContentAsFile($csv, $form . '.csv', 'text/csv');
+        return Craft::$app->response->sendContentAsFile($csv, $form . '.csv', ['mimeType' => 'text/csv']);
     }
 }
