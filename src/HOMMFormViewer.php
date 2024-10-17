@@ -79,6 +79,7 @@ class HOMMFormViewer extends Plugin
             UrlManager::EVENT_REGISTER_CP_URL_RULES,
             function (RegisterUrlRulesEvent $event) {
                 $event->rules['hommformviewer/export'] = 'hommformviewer/form-viewer/export';
+                $event->rules['hommformviewer/delete'] = 'hommformviewer/form-viewer/delete';
             }
         );
 

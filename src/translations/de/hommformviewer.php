@@ -18,5 +18,7 @@ return [
     'Visible table' => 'Anzuzeigende Tabelle',
     'Form requests' => 'Formular Anfragen',
     'Search' => 'Suchen',
-    'Export as CSV' => 'Als CSV exportieren',
+    'Export...' => 'Exportieren...',
+    'Delete' => 'Löschen',
+    'Do you really want to delete this form and all its data?\\nThis action cannot be undone.' => 'Wollen Sie dieses Formular und alle dazugehörigen Daten wirklich löschen?\\nDiese Aktion kann nicht rückgängig gemacht werden.',
 ];

@@ -18,5 +18,7 @@ return [
     'Visible table' => 'Visible table',
     'Form requests' => 'Form requests',
     'Search' => 'Search',
-    'Export as CSV' => 'Export as CSV',
+    'Export...' => 'Export...',
+    'Delete' => 'Delete',
+    'Do you really want to delete this form and all its data?\\nThis action cannot be undone.' => 'Do you really want to delete this form and all its data?\\nThis action cannot be undone.',
 ];
