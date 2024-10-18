@@ -10,22 +10,20 @@
  * @since     1.0.0
  */
 
-.hommformviewer__table {
+ .hommformviewer__table {
     width: 100%;
     overflow-x: auto;
+    max-height: calc(100vh - 300px);
+}
+
+@media screen and (max-width: 972px) {
+    .hommformviewer__table {
+        max-height: calc(100vh - 400px);
+    }
 }
 
 .hommformviewer__table table {
     width: 100%;
-}
-
-.hommformviewer__table table tr:not(:last-child) {
-    border-top: 1px solid var(--gray-100, hsl(212,50%,93%));
-    border-bottom: 1px solid var(--gray-100, hsl(212,50%,93%));
-}
-
-.hommformviewer__table tr:hover {
-    background-color: var(--gray-050, hsl(212,60%,97%));
 }
 
 .hommformviewer__table table th > .table-item,
