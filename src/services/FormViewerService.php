@@ -56,7 +56,7 @@ class FormViewerService extends Component
             $payload = json_decode($payload, true);
 
             unset($payload['recaptcha_response']);
-            $head = array_merge($head, array_keys($payload));
+            $head = array_merge($head, array_keys($payload ?? []));
         }
         $head = array_unique($head);
 
