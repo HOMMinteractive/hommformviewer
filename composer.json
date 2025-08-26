@@ -2,7 +2,7 @@
     "name": "homm/hommformviewer",
     "description": "Show form requests in the control panel",
     "type": "craft-plugin",
-    "version": "2.2.1",
+    "version": "3.0.0",
     "keywords": [
         "craft",
         "cms",
@@ -27,8 +27,8 @@
         }
     ],
     "require": {
-        "php": "^8.0|^8.1",
-        "craftcms/cms": "^4.0.0",
+        "php": "^8.2",
+        "craftcms/cms": "^5.0.0",
         "ext-json": "*",
         "ext-fileinfo": "*"
     },
@@ -45,5 +45,11 @@
         "documentationUrl": "https://github.com/HOMMinteractive/hommformviewer/blob/master/README.md",
         "changelogUrl": "https://raw.githubusercontent.com/HOMMinteractive/hommformviewer/master/CHANGELOG.md",
         "class": "homm\\hommformviewer\\HOMMFormViewer"
+    },
+    "config": {
+        "allow-plugins": {
+            "yiisoft/yii2-composer": true,
+            "craftcms/plugin-installer": true
+        }
     }
 }
