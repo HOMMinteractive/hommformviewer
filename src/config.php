@@ -1,6 +1,6 @@
 <?php
 /**
- * HOMMFormViewer plugin for Craft CMS 4.x
+ * HOMMFormViewer plugin for Craft CMS 5.x
  *
  * Show form requests in the control panel
  *

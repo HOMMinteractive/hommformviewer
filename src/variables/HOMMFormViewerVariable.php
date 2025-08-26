@@ -1,6 +1,6 @@
 <?php
 /**
- * HOMM Social Feed plugin for Craft CMS 4.x
+ * HOMM Social Feed plugin for Craft CMS 5.x
  *
  * Show form requests in the control panel
  *

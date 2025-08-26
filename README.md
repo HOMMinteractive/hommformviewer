@@ -6,9 +6,10 @@ HOMM Form Viewer for contact form requests
 
 ## Requirements
 
-This plugin requires Craft CMS 4.x.
+This plugin requires Craft CMS 5.x and PHP 8.2+.
 
-For the Craft CMS 3.x plugin version, see 1.x tags or the 3.x branch.
+For the Craft CMS 4.x plugin version, see 2.x tags.
+For the Craft CMS 3.x plugin version, see 1.x tags.
 
 ## Installation
 
