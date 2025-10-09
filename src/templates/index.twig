@@ -86,4 +86,8 @@
             </tbody>
         </table>
     </div>
+
+    <div class="hommformviewer__total">
+        <strong>{{ 'Total: {count} entries'|t('hommformviewer', { count: rows[1:]|length }) }}</strong>
+    </div>
 {% endset %}

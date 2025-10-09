@@ -5,9 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres
 to [Semantic Versioning](http://semver.org/).
 
+## 3.0.1 - 2025-08-10
+
+- updated table styling
+
 ## 3.0.0 - 2025-08-25
 
 - Craft CMS 5.x compatibility
+
+## 2.2.2 - 2025-10-09
+
+- updated table styling
 
 ## 2.2.1 - 2024-10-18
 
@@ -32,6 +40,10 @@ to [Semantic Versioning](http://semver.org/).
 - Craft CMS 4.x ready
 - Refactoring whole code
 - Make the form viewer ready for the new DB structure
+
+## 1.2.2 - 2025-10-09
+
+- updated table styling
 
 ## 1.2.1 - 2024-10-18
 
