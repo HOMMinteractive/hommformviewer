@@ -34,3 +34,8 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+.hommformviewer__total {
+    padding-top: 1rem;
+    padding-left: 12px;
+}

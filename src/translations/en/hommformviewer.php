@@ -21,4 +21,5 @@ return [
     'Export...' => 'Export...',
     'Delete' => 'Delete',
     'Do you really want to delete this form and all its data?\\nThis action cannot be undone.' => 'Do you really want to delete this form and all its data?\\nThis action cannot be undone.',
+    'Total: {count} entries' => 'Total: {count} entries',
 ];

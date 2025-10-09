@@ -29,6 +29,10 @@ to [Semantic Versioning](http://semver.org/).
 - Refactoring whole code
 - Make the form viewer ready for the new DB structure
 
+## 1.2.2 - 2025-10-09
+
+- updated table styling
+
 ## 1.2.1 - 2024-10-18
 
 - updated table styling
