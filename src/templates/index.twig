@@ -74,7 +74,14 @@
                     <tr>
                         {% for item in row %}
                             <td>
-                                {% if 'http://' in item or 'https://' in item %}
+                                {% if item is array %}
+                                    {% for key, value in item|map(v => v is array ? v : [v]) %}
+                                        {% for key, value in value %}
+                                            {{value}},
+                                        {% endfor %}
+                                        <br>
+                                    {% endfor %}
+                                {% elseif 'http://' in item or 'https://' in item %}
                                     <a href="{{ item }}" target="_blank" title="{{ item }}" class="table-item">{{ item }}</a>
                                 {% else %}
                                     <span title="{{ item }}" class="table-item">{{ item }}</span>
