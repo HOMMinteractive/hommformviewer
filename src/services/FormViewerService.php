@@ -73,8 +73,7 @@ class FormViewerService extends Component
                 }
 
                 if (json_validate(str_replace("&quot;", '"', $payload[$i])) && isset($payload[$i])) {
-                    $cleanJson = json_decode(str_replace("&quot;", '"', $payload[$i]), true);
-                    $row[$i] = $cleanJson;
+                    $row[$i] = json_decode(str_replace("&quot;", '"', $payload[$i]), true);
                 } else {
                     $row[$i] = $payload[$i] ?? '';
                 }
