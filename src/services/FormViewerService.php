@@ -72,11 +72,16 @@ class FormViewerService extends Component
                     continue;
                 }
 
-                $row[$i] = $payload[$i] ?? '';
+                if (json_validate(str_replace("&quot;", '"', $payload[$i])) && isset($payload[$i])) {
+                    $row[$i] = json_decode(str_replace("&quot;", '"', $payload[$i]), true);
+                } else {
+                    $row[$i] = $payload[$i] ?? '';
+                }
             }
+            
             $body[] = $row;
         }
-
+        
         return [$head, ...$body];
     }
 
