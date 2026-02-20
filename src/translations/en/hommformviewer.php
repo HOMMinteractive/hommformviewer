@@ -15,7 +15,8 @@
  */
 return [
     '{name} plugin loaded' => '{name} plugin loaded',
-    'Visible table' => 'Visible table',
+    'Recaptcha Site Key' => 'Recaptcha Site Key',
+    'Recaptcha Secret' => 'Recaptcha Secret',
     'Form requests' => 'Form requests',
     'Search' => 'Search',
     'Export...' => 'Export...',

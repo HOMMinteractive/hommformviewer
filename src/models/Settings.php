@@ -32,10 +32,11 @@ class Settings extends Model
     // Public Properties
     // =========================================================================
 
-    /**
-     * @var string
-     */
-    public string $table = '0_contact';
+    public ?string $storagePath = '@storage/form';
+
+    public ?string $recaptchaSiteKey = null;
+
+    public ?string $recaptchaSecret = null;
 
     // Public Methods
     // =========================================================================
@@ -53,8 +54,10 @@ class Settings extends Model
     public function rules(): array
     {
         return [
-            ['table', 'string'],
-            ['table', 'default', 'value' => '0_contact'],
+            ['storagePath', 'string'],
+            ['storagePath', 'default', 'value' => '@storage/form'],
+            ['recaptchaSiteKey', 'string'],
+            ['recaptchaSecret', 'string'],
         ];
     }
 }

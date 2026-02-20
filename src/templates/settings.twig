@@ -15,9 +15,26 @@
 
 {% import "_includes/forms" as forms %}
 
-{{ forms.textField({
-    label: 'Visible table'|t('hommformviewer'),
-    id: 'table',
-    name: 'table',
-    value: settings['table']})
-}}
+{{ forms.autosuggestField({
+    label: 'Storage path for attachments'|t('hommformviewer'),
+    id: 'storagePath',
+    name: 'storagePath',
+    value: settings['storagePath'],
+    suggestAliases: true
+}) }}
+
+{{ forms.autosuggestField({
+    label: 'Recaptcha Site Key'|t('hommformviewer'),
+    id: 'recaptchaSiteKey',
+    name: 'recaptchaSiteKey',
+    value: settings['recaptchaSiteKey'],
+    suggestEnvVars: true,
+}) }}
+
+{{ forms.autosuggestField({
+    label: 'Recaptcha Secret'|t('hommformviewer'),
+    id: 'recaptchaSecret',
+    name: 'recaptchaSecret',
+    value: settings['recaptchaSecret'],
+    suggestEnvVars: true,
+}) }}
