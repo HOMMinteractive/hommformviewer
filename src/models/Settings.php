@@ -32,13 +32,19 @@ class Settings extends Model
     // Public Properties
     // =========================================================================
 
+    public bool $enableCpSection = true;
+
     public ?string $storagePath = '@storage/form';
 
     public ?string $recaptchaSiteKey = null;
 
     public ?string $recaptchaSecret = null;
 
-    public ?float $recaptchaScoreThreshold = 0.5;
+    public float $recaptchaScoreThreshold = 0.5;
+
+    public ?string $htmlMailTemplatePath = null;
+
+    public ?string $textMailTemplatePath = null;
 
     // Public Methods
     // =========================================================================
@@ -56,12 +62,23 @@ class Settings extends Model
     public function rules(): array
     {
         return [
+            ['enableCpSection', 'boolean'],
+            ['enableCpSection', 'default', 'value' => true],
+
             ['storagePath', 'string'],
             ['storagePath', 'default', 'value' => '@storage/form'],
+
             ['recaptchaSiteKey', 'string'],
             ['recaptchaSecret', 'string'],
+
             ['recaptchaScoreThreshold', 'number', 'min' => 0, 'max' => 1],
             ['recaptchaScoreThreshold', 'default', 'value' => 0.5],
+
+            ['htmlMailTemplatePath', 'string'],
+            ['htmlMailTemplatePath', 'default', 'value' => null],
+
+            ['textMailTemplatePath', 'string'],
+            ['textMailTemplatePath', 'default', 'value' => null],
         ];
     }
 }

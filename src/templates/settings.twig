@@ -15,6 +15,13 @@
 
 {% import "_includes/forms" as forms %}
 
+{{ forms.lightswitchField({
+    label: 'Enable Control Panel section'|t('hommformviewer'),
+    id: 'enableCpSection',
+    name: 'enableCpSection',
+    on: settings['enableCpSection'],
+}) }}
+
 {{ forms.autosuggestField({
     label: 'Storage path for attachments'|t('hommformviewer'),
     id: 'storagePath',
@@ -24,8 +31,10 @@
     suggestEnvVars: true,
 }) }}
 
+<hr>
+
 {{ forms.autosuggestField({
-    label: 'Recaptcha Site Key'|t('hommformviewer'),
+    label: 'reCAPTCHA site key'|t('hommformviewer'),
     id: 'recaptchaSiteKey',
     name: 'recaptchaSiteKey',
     value: settings['recaptchaSiteKey'],
@@ -33,7 +42,7 @@
 }) }}
 
 {{ forms.autosuggestField({
-    label: 'Recaptcha Secret'|t('hommformviewer'),
+    label: 'reCAPTCHA secret'|t('hommformviewer'),
     id: 'recaptchaSecret',
     name: 'recaptchaSecret',
     value: settings['recaptchaSecret'],
@@ -41,7 +50,7 @@
 }) }}
 
 {{ forms.rangeField({
-    label: 'Recaptcha Score Threshold'|t('hommformviewer'),
+    label: 'reCAPTCHA score threshold'|t('hommformviewer'),
     id: 'recaptchaScoreThreshold',
     name: 'recaptchaScoreThreshold',
     value: settings['recaptchaScoreThreshold'] ?? 0.5,
@@ -49,4 +58,24 @@
     max: 1,
     step: 0.1,
     instructions: 'The higher the value, the stricter the spam protection. A common default is 0.5.'|t('hommformviewer'),
+}) }}
+
+<hr>
+
+{{ forms.autosuggestField({
+    label: 'Custom template path for HTML mails'|t('hommformviewer'),
+    id: 'htmlMailTemplatePath',
+    instructions: 'Leave empty to use the default template'|t('hommformviewer'),
+    name: 'htmlMailTemplatePath',
+    value: settings['htmlMailTemplatePath'],
+    suggestTemplates: true,
+}) }}
+
+{{ forms.autosuggestField({
+    label: 'Custom template path for text mails'|t('hommformviewer'),
+    id: 'textMailTemplatePath',
+    instructions: 'Leave empty to use the default template'|t('hommformviewer'),
+    name: 'textMailTemplatePath',
+    value: settings['textMailTemplatePath'],
+    suggestTemplates: true,
 }) }}

@@ -41,6 +41,9 @@ Example form submission:
     {{ hiddenInput('receivers', entry.receivers|hash) }}
     {{ hiddenInput('subject', entry.subject|hash) }}
 
+    {# Optional: set a redirection URL #}
+    {{ redirectInput('redirect/to/page') }}
+
     <label for="name">Name</label>
     <input type="text" name="name" id="name">
 
@@ -61,6 +64,7 @@ After submitting a form, you can view, search and export them in the control pan
 
 Some things to do, and ideas for potential features:
 
+* Set flash messages if the form wasn't submitted through javascript
 * You'll let us know...
 
 Brought to you by [HOMM interactive](https://github.com/HOMMinteractive)

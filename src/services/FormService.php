@@ -243,19 +243,23 @@ class FormService extends Component
 
     public function getHtmlBody(array $payload, ?string $confirmation = null): string
     {
+        $templatePath = HOMMFormViewer::$plugin->getSettings()->htmlMailTemplatePath;
+
         return Craft::$app->view->renderTemplate(
-            'hommformviewer/email/html',
+            $templatePath ?? 'hommformviewer/email/html',
             ['payload' => $payload, 'confirmation' => $confirmation],
-            View::TEMPLATE_MODE_CP
+            $templatePath ? View::TEMPLATE_MODE_SITE : View::TEMPLATE_MODE_CP
         );
     }
 
     public function getTextBody(array $payload, ?string $confirmation = null): string
     {
+        $templatePath = HOMMFormViewer::$plugin->getSettings()->textMailTemplatePath;
+
         return Craft::$app->view->renderTemplate(
-            'hommformviewer/email/text',
+            $templatePath ?? 'hommformviewer/email/text',
             ['payload' => $payload, 'confirmation' => $confirmation],
-            View::TEMPLATE_MODE_CP
+            $templatePath ? View::TEMPLATE_MODE_SITE : View::TEMPLATE_MODE_CP
         );
     }
 

@@ -73,6 +73,8 @@ class HOMMFormViewer extends Plugin
             'formService' => FormService::class,
         ]);
 
+        $this->hasCpSection = HOMMFormViewer::$plugin->getSettings()->enableCpSection;
+
         if (Craft::$app instanceof ConsoleApplication) {
             $this->controllerNamespace = 'homm\hommformviewer\console\controllers';
         }
