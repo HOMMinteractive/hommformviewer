@@ -20,7 +20,11 @@ class Install extends Migration
             [
                 'id' => $this->primaryKey(),
                 'formId' => $this->string(),
+                'receivers' => $this->text(),
+                'replyto' => $this->text(),
+                'subject' => $this->text(),
                 'payload' => $this->json()->notNull(),
+                'ip' => $this->string(),
                 'dateCreated' => $this->dateTime()->notNull(),
             ]
         );

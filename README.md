@@ -27,21 +27,40 @@ To install the plugin, follow these instructions.
 
 ## HOMM Form Viewer Overview
 
-HOMM Form Viewer is a Craft plugin to show form requests in the control panel.
+With this plugin you can send forms per email and view them through the control panel.
+Specially this plugin does not send attachments through email, but saves it at a specified location and sends instead a link to the user.
 
 ## Using HOMM Form Viewer
 
-Select _HOMM Form Viewer_ in the left navigation.
+Example form submission:
 
-You can do the following:
+```twig
+<form action="{{ url('hommformviewer/submit') }}" method="post" enctype="multipart/form-data">
+    {{ csrfInput() }} {# pass `async: true` if you use static site caching #}
+    {{ hiddenInput('formId', entry.formId) }}
+    {{ hiddenInput('receivers', entry.receivers|hash) }}
+    {{ hiddenInput('subject', entry.subject|hash) }}
 
-- **Search:** the form entries
-- **Group:** by contact form categories
+    <label for="name">Name</label>
+    <input type="text" name="name" id="name">
+
+    <label for="email">Email</label>
+    <input type="email" name="email" id="email">
+
+    {# Optional: a field name which contains the reply address #}
+    {{ hiddenInput('replyto', 'email'|hash) }}
+
+    {# Optional: a confirmation text which will be sent to the email address provided by "replyto" #}
+    <textarea name="confirmation" style="display: none;">{{ entry.confirmation }}</textarea>
+</form>
+```
+
+After submitting a form, you can view, search and export them in the control panel.
 
 ## HOMM Form Viewer Roadmap
 
 Some things to do, and ideas for potential features:
 
-* Entrify everything to keep a clean and consistent user experience
+* You'll let us know...
 
 Brought to you by [HOMM interactive](https://github.com/HOMMinteractive)

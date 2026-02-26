@@ -1,0 +1,16 @@
+{% if confirmation %}
+{{ confirmation }}
+{% endif %}
+
+{% for key, item in payload %}
+{% if item.name is defined and item.folder is defined -%}
+{{ key }}: {{ cpUrl('hommformviewer/download/' ~ item.folder ~ '/' ~ item.name) }}
+{% elseif item is array -%}
+{{ key }}:
+{% for value in item|map(v => v is array ? v : [v]) -%}
+- {{ value|join(', ') }}
+{% endfor %}
+{% else -%}
+{{ key }}: {{ item|nl2br }}
+{% endif %}
+{% endfor %}

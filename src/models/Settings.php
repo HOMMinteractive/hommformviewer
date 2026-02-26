@@ -38,6 +38,8 @@ class Settings extends Model
 
     public ?string $recaptchaSecret = null;
 
+    public ?float $recaptchaScoreThreshold = 0.5;
+
     // Public Methods
     // =========================================================================
 
@@ -58,6 +60,8 @@ class Settings extends Model
             ['storagePath', 'default', 'value' => '@storage/form'],
             ['recaptchaSiteKey', 'string'],
             ['recaptchaSecret', 'string'],
+            ['recaptchaScoreThreshold', 'number', 'min' => 0, 'max' => 1],
+            ['recaptchaScoreThreshold', 'default', 'value' => 0.5],
         ];
     }
 }

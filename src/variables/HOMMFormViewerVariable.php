@@ -30,8 +30,8 @@ class HOMMFormViewerVariable
         return HOMMFormViewer::$plugin->formViewerService->getForms();
     }
 
-    public function data(string $form = null): array
+    public function entries(string $form): array
     {
-        return HOMMFormViewer::$plugin->formViewerService->getData($form);
+        return HOMMFormViewer::$plugin->formViewerService->entries($form);
     }
 }

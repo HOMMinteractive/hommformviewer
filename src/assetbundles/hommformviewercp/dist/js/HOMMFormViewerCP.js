@@ -14,10 +14,10 @@
 let $tr = document.querySelectorAll('.hommformviewer__table tbody tr');
 
 document.querySelector('.hommformviewer_search').addEventListener('keyup', function (e) {
-    let search = e.target.value;
+    let search = e.target.value.toLocaleLowerCase();
 
     $tr.forEach(function ($tr) {
-        if ($tr.innerHTML.includes(search)) {
+        if ($tr.innerHTML.toLocaleLowerCase().includes(search)) {
             $tr.style.display = ''
         } else {
             $tr.style.display = 'none'

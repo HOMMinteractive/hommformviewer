@@ -20,7 +20,8 @@
     id: 'storagePath',
     name: 'storagePath',
     value: settings['storagePath'],
-    suggestAliases: true
+    suggestAliases: true,
+    suggestEnvVars: true,
 }) }}
 
 {{ forms.autosuggestField({
@@ -37,4 +38,15 @@
     name: 'recaptchaSecret',
     value: settings['recaptchaSecret'],
     suggestEnvVars: true,
+}) }}
+
+{{ forms.rangeField({
+    label: 'Recaptcha Score Threshold'|t('hommformviewer'),
+    id: 'recaptchaScoreThreshold',
+    name: 'recaptchaScoreThreshold',
+    value: settings['recaptchaScoreThreshold'] ?? 0.5,
+    min: 0,
+    max: 1,
+    step: 0.1,
+    instructions: 'The higher the value, the stricter the spam protection. A common default is 0.5.'|t('hommformviewer'),
 }) }}

@@ -1,0 +1,23 @@
+{% if confirmation %}
+    {{ confirmation|nl2br }}
+    <br><br>
+{% endif %}
+
+<table style="width: 100%;" width="100%">
+    {% for key, item in payload %}
+        <tr>
+            <th style="border-bottom: 1px solid #efefef; border-right: 1px solid #efefef; padding: 5px; text-align: left; width: 150px;">{{ key }}</th>
+            <td style="border-bottom: 1px solid #efefef; padding: 5px;">
+                {%- if item.name is defined and item.folder is defined -%}
+                    <a href="{{ cpUrl('hommformviewer/download/' ~ item.folder ~ '/' ~ item.name) }}" target="_blank" title="{{ item.name }}" class="table-item">{{ item.name }}</a>
+                {%- elseif item is array -%}
+                    {%- for value in item|map(v => v is array ? v : [v]) -%}
+                        {{- value|join(', ') -}}<br>
+                    {%- endfor -%}
+                {%- else -%}
+                    {{- item|nl2br -}}
+                {%- endif -%}
+            </td>
+        </tr>
+    {% endfor %}
+</table>

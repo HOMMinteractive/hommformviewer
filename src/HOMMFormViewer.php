@@ -18,6 +18,7 @@ use craft\web\twig\variables\CraftVariable;
 use craft\web\UrlManager;
 use homm\hommformviewer\models\Settings;
 use homm\hommformviewer\services\FormViewerService;
+use homm\hommformviewer\services\FormService;
 use homm\hommformviewer\variables\HOMMFormViewerVariable;
 use yii\base\Event;
 
@@ -29,6 +30,7 @@ use yii\base\Event;
  * @since     1.0.0
  *
  * @property  FormViewerService $formViewerService
+ * @property  FormService $formService
  */
 class HOMMFormViewer extends Plugin
 {
@@ -68,6 +70,7 @@ class HOMMFormViewer extends Plugin
 
         $this->setComponents([
             'formViewerService' => FormViewerService::class,
+            'formService' => FormService::class,
         ]);
 
         if (Craft::$app instanceof ConsoleApplication) {
@@ -78,8 +81,17 @@ class HOMMFormViewer extends Plugin
             UrlManager::class,
             UrlManager::EVENT_REGISTER_CP_URL_RULES,
             function (RegisterUrlRulesEvent $event) {
+                $event->rules['hommformviewer/download/<id>/<file>'] = 'hommformviewer/form-viewer/download';
                 $event->rules['hommformviewer/export'] = 'hommformviewer/form-viewer/export';
                 $event->rules['hommformviewer/delete'] = 'hommformviewer/form-viewer/delete';
+            }
+        );
+
+        Event::on(
+            UrlManager::class,
+            UrlManager::EVENT_REGISTER_SITE_URL_RULES,
+            function (RegisterUrlRulesEvent $event) {
+                $event->rules['hommformviewer/submit'] = 'hommformviewer/form-viewer/submit';
             }
         );
 
