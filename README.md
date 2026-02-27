@@ -1,6 +1,6 @@
-# HOMM Form Viewer for Craft CMS
+# HOMM Form for Craft CMS
 
-HOMM Form Viewer for contact form requests
+HOMM Form for contact form requests
 
 ![Screenshot](resources/img/plugin-logo.svg)
 
@@ -21,21 +21,21 @@ To install the plugin, follow these instructions.
 
 2. Then tell Composer to load the plugin:
 
-        composer require homm/hommformviewer
+        composer require homm/hommform
 
-3. In the Control Panel, go to Settings → Plugins and click the “Install” button for HOMM Form Viewer.
+3. In the Control Panel, go to Settings → Plugins and click the “Install” button for HOMM Form.
 
-## HOMM Form Viewer Overview
+## HOMM Form Overview
 
 With this plugin you can send forms per email and view them through the control panel.
 Specially this plugin does not send attachments through email, but saves it at a specified location and sends instead a link to the user.
 
-## Using HOMM Form Viewer
+## Using HOMM Form
 
 Example form submission:
 
 ```twig
-<form action="{{ url('hommformviewer/submit') }}" method="post" enctype="multipart/form-data">
+<form action="{{ url('hommform/submit') }}" method="post" enctype="multipart/form-data">
     {{ csrfInput() }} {# pass `async: true` if you use static site caching #}
     {{ hiddenInput('formId', entry.formId) }}
     {{ hiddenInput('receivers', entry.receivers|hash) }}
@@ -60,7 +60,7 @@ Example form submission:
 
 After submitting a form, you can view, search and export them in the control panel.
 
-## HOMM Form Viewer Roadmap
+## HOMM Form Roadmap
 
 Some things to do, and ideas for potential features:
 

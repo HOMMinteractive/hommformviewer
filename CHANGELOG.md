@@ -1,4 +1,4 @@
-# HOMM Form Viewer Changelog
+# HOMM Form Changelog
 
 All notable changes to this project will be documented in this file.
 

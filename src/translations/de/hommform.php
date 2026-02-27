@@ -1,6 +1,6 @@
 <?php
 /**
- * HOMMFormViewer plugin for Craft CMS 5.x
+ * HOMMForm plugin for Craft CMS 5.x
  *
  * Show form requests in the control panel
  *
@@ -10,7 +10,7 @@
 
 /**
  * @author    Benjamin Ammann
- * @package   HOMMFormViewer
+ * @package   HOMMForm
  * @since     2.0.0
  */
 return [

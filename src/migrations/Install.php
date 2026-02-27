@@ -1,6 +1,6 @@
 <?php
 
-namespace homm\hommformviewer\migrations;
+namespace homm\hommform\migrations;
 
 use Craft;
 use craft\db\Migration;
@@ -16,7 +16,7 @@ class Install extends Migration
     public function safeUp(): bool
     {
         $this->createTable(
-            '{{%homm_formviewer_submissions}}',
+            '{{%homm_form_submissions}}',
             [
                 'id' => $this->primaryKey(),
                 'formId' => $this->string(),
@@ -37,7 +37,7 @@ class Install extends Migration
      */
     public function safeDown(): bool
     {
-        $this->dropTableIfExists('{{%homm_formviewer_submissions}}');
+        $this->dropTableIfExists('{{%homm_form_submissions}}');
 
         return true;
     }

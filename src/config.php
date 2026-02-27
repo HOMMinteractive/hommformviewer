@@ -1,6 +1,6 @@
 <?php
 /**
- * HOMMFormViewer plugin for Craft CMS 5.x
+ * HOMMForm plugin for Craft CMS 5.x
  *
  * Show form requests in the control panel
  *
@@ -9,12 +9,12 @@
  */
 
 /**
- * HOMMFormViewer config.php
+ * HOMMForm config.php
  *
- * This file exists only as a template for the HOMMFormViewer settings.
+ * This file exists only as a template for the HOMMForm settings.
  * It does nothing on its own.
  *
- * Don't edit this file, instead copy it to 'craft/config' as 'hommformviewer.php'
+ * Don't edit this file, instead copy it to 'craft/config' as 'hommform.php'
  * and make your changes there to override default settings.
  *
  * Once copied to 'craft/config', this file will be multi-environment aware as

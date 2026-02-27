@@ -8,17 +8,17 @@
  * @copyright Copyright (c) 2019 HOMM interactive
  */
 
-namespace homm\hommformviewer\variables;
+namespace homm\hommform\variables;
 
 
-use homm\hommformviewer\HOMMFormViewer;
+use homm\hommform\HOMMForm;
 
 /**
  * @author    Domenik Hofer
  * @package   Hommjuicer
  * @since     0.0.1
  */
-class HOMMFormViewerVariable
+class HOMMFormVariable
 {
     /**
      * Get the form types.
@@ -27,11 +27,11 @@ class HOMMFormViewerVariable
      */
     public function forms(): array
     {
-        return HOMMFormViewer::$plugin->formViewerService->getForms();
+        return HOMMForm::$plugin->viewerService->getForms();
     }
 
     public function entries(string $form): array
     {
-        return HOMMFormViewer::$plugin->formViewerService->entries($form);
+        return HOMMForm::$plugin->viewerService->entries($form);
     }
 }

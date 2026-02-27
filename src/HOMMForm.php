@@ -1,6 +1,6 @@
 <?php
 /**
- * HOMMFormViewer plugin for Craft CMS 5.x
+ * HOMMForm plugin for Craft CMS 5.x
  *
  * Show form requests in the control panel
  *
@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2019 HOMM interactive
  */
 
-namespace homm\hommformviewer;
+namespace homm\hommform;
 
 use Craft;
 use craft\base\Plugin;
@@ -16,29 +16,29 @@ use craft\console\Application as ConsoleApplication;
 use craft\events\RegisterUrlRulesEvent;
 use craft\web\twig\variables\CraftVariable;
 use craft\web\UrlManager;
-use homm\hommformviewer\models\Settings;
-use homm\hommformviewer\services\FormViewerService;
-use homm\hommformviewer\services\FormService;
-use homm\hommformviewer\variables\HOMMFormViewerVariable;
+use homm\hommform\models\Settings;
+use homm\hommform\services\ViewerService;
+use homm\hommform\services\SubmitService;
+use homm\hommform\variables\HOMMFormVariable;
 use yii\base\Event;
 
 /**
- * Class HOMMFormViewer
+ * Class HOMMForm
  *
  * @author    Domenik Hofer
- * @package   HOMMFormViewer
+ * @package   HOMMForm
  * @since     1.0.0
  *
- * @property  FormViewerService $formViewerService
- * @property  FormService $formService
+ * @property  ViewerService $viewerService
+ * @property  SubmitService $SubmitService
  */
-class HOMMFormViewer extends Plugin
+class HOMMForm extends Plugin
 {
     // Static Properties
     // =========================================================================
 
     /**
-     * @var HOMMFormViewer
+     * @var HOMMForm
      */
     public static $plugin;
 
@@ -69,23 +69,23 @@ class HOMMFormViewer extends Plugin
         self::$plugin = $this;
 
         $this->setComponents([
-            'formViewerService' => FormViewerService::class,
-            'formService' => FormService::class,
+            'viewerService' => ViewerService::class,
+            'submitService' => SubmitService::class,
         ]);
 
-        $this->hasCpSection = HOMMFormViewer::$plugin->getSettings()->enableCpSection;
+        $this->hasCpSection = HOMMForm::$plugin->getSettings()->enableCpSection;
 
         if (Craft::$app instanceof ConsoleApplication) {
-            $this->controllerNamespace = 'homm\hommformviewer\console\controllers';
+            $this->controllerNamespace = 'homm\hommform\console\controllers';
         }
 
         Event::on(
             UrlManager::class,
             UrlManager::EVENT_REGISTER_CP_URL_RULES,
             function (RegisterUrlRulesEvent $event) {
-                $event->rules['hommformviewer/download/<id>/<file>'] = 'hommformviewer/form-viewer/download';
-                $event->rules['hommformviewer/export'] = 'hommformviewer/form-viewer/export';
-                $event->rules['hommformviewer/delete'] = 'hommformviewer/form-viewer/delete';
+                $event->rules['hommform/download/<id>/<file>'] = 'hommform/viewer/download';
+                $event->rules['hommform/export'] = 'hommform/viewer/export';
+                $event->rules['hommform/delete'] = 'hommform/viewer/delete';
             }
         );
 
@@ -93,7 +93,7 @@ class HOMMFormViewer extends Plugin
             UrlManager::class,
             UrlManager::EVENT_REGISTER_SITE_URL_RULES,
             function (RegisterUrlRulesEvent $event) {
-                $event->rules['hommformviewer/submit'] = 'hommformviewer/form-viewer/submit';
+                $event->rules['hommform/submit'] = 'hommform/submit/index';
             }
         );
 
@@ -103,13 +103,13 @@ class HOMMFormViewer extends Plugin
             function (Event $event) {
                 /** @var CraftVariable $variable */
                 $variable = $event->sender;
-                $variable->set('hommformviewer', HOMMFormViewerVariable::class);
+                $variable->set('hommform', HOMMFormVariable::class);
             }
         );
 
         Craft::info(
             Craft::t(
-                'hommformviewer',
+                'hommform',
                 '{name} plugin loaded',
                 ['name' => $this->name]
             ),
@@ -120,7 +120,7 @@ class HOMMFormViewer extends Plugin
     public function getCpNavItem(): ?array
     {
         $item = parent::getCpNavItem();
-        $item['label'] = Craft::t('hommformviewer', 'Form requests');
+        $item['label'] = Craft::t('hommform', 'Form requests');
         return $item;
     }
 
@@ -141,7 +141,7 @@ class HOMMFormViewer extends Plugin
     protected function settingsHtml(): string
     {
         return Craft::$app->view->renderTemplate(
-            'hommformviewer/settings',
+            'hommform/settings',
             ['settings' => $this->getSettings()]
         );
     }

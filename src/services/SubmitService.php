@@ -1,7 +1,7 @@
 <?php
 
 /**
- * HOMMFormViewer plugin for Craft CMS 5.x
+ * HOMMForm plugin for Craft CMS 5.x
  *
  * Show form requests in the control panel
  *
@@ -9,7 +9,7 @@
  * @copyright Copyright (c) 2019 HOMM interactive
  */
 
-namespace homm\hommformviewer\services;
+namespace homm\hommform\services;
 
 use Craft;
 use craft\db\Query;
@@ -19,15 +19,15 @@ use craft\helpers\FileHelper;
 use craft\web\UploadedFile;
 use craft\web\View;
 use DateTime;
-use homm\hommformviewer\HOMMFormViewer;
+use homm\hommform\HOMMForm;
 use yii\web\Request;
 
 /**
- * @author    Domenik Hofer
- * @package   HOMMFormViewer
- * @since     1.0.0
+ * @author    Benjamin Ammann
+ * @package   HOMMForm
+ * @since     4.0.0
  */
-class FormService extends Component
+class SubmitService extends Component
 {
     private const ALLOWED_FILE_TYPES = [
         'jpg', 'jpeg', 'eps', 'png', 'svg',
@@ -59,8 +59,8 @@ class FormService extends Component
 
     public function validateReCaptcha(string $recaptcha_response): bool
     {
-        $secret = App::parseEnv(HOMMFormViewer::$plugin->getSettings()->recaptchaSecret);
-        $scoreThreshold = HOMMFormViewer::$plugin->getSettings()->recaptchaScoreThreshold;
+        $secret = App::parseEnv(HOMMForm::$plugin->getSettings()->recaptchaSecret);
+        $scoreThreshold = HOMMForm::$plugin->getSettings()->recaptchaScoreThreshold;
 
         if (! $secret) {
             // If no secret is set, skip reCAPTCHA validation
@@ -137,7 +137,7 @@ class FormService extends Component
                 'file' => $file,
                 'name' => $this->slugify($file->baseName) . '.' . $file->extension,
                 'folder' => $submissionId,
-                'storage' => HOMMFormViewer::$plugin->getSettings()->storagePath,
+                'storage' => HOMMForm::$plugin->getSettings()->storagePath,
             ];
         }
 
@@ -178,7 +178,7 @@ class FormService extends Component
                 $errors[] = [
                     'error' => 'file_type_not_allowed',
                     'name' => $file->name,
-                    'message' => Craft::t('hommformviewer', 'File type not allowed'),
+                    'message' => Craft::t('hommform', 'File type not allowed'),
                 ];
 
                 continue;
@@ -188,7 +188,7 @@ class FormService extends Component
                 $errors[] = [
                     'error' => 'directory_creation_failed',
                     'name' => $file->name,
-                    'message' => Craft::t('hommformviewer', 'Failed to create directory'),
+                    'message' => Craft::t('hommform', 'Failed to create directory'),
                 ];
 
                 continue;
@@ -198,7 +198,7 @@ class FormService extends Component
                 $errors[] = [
                     'error' => 'upload_failed',
                     'name' => $file->name,
-                    'message' => Craft::t('hommformviewer', 'Failed to upload file'),
+                    'message' => Craft::t('hommform', 'Failed to upload file'),
                 ];
 
                 continue;
@@ -214,7 +214,7 @@ class FormService extends Component
         try {
             $insert = (new Query())
                 ->createCommand()
-                ->insert('{{%homm_formviewer_submissions}}', [
+                ->insert('{{%homm_form_submissions}}', [
                     'formId' => $formId,
                     'receivers' => $receivers,
                     'replyto' => $replyto,
@@ -228,13 +228,13 @@ class FormService extends Component
             if ($insert <= 0) {
                 $errors[] = [
                     'error' => 'database_error',
-                    'message' => Craft::t('hommformviewer', 'Failed to insert form data'),
+                    'message' => Craft::t('hommform', 'Failed to insert form data'),
                 ];
             }
         } catch (\Throwable $th) {
             $errors[] = [
                 'error' => 'database_error',
-                'message' => Craft::t('hommformviewer', 'Failed to save form data'),
+                'message' => Craft::t('hommform', 'Failed to save form data'),
             ];
         }
 
@@ -243,10 +243,10 @@ class FormService extends Component
 
     public function getHtmlBody(array $payload, ?string $confirmation = null): string
     {
-        $templatePath = HOMMFormViewer::$plugin->getSettings()->htmlMailTemplatePath;
+        $templatePath = HOMMForm::$plugin->getSettings()->htmlMailTemplatePath;
 
         return Craft::$app->view->renderTemplate(
-            $templatePath ?? 'hommformviewer/email/html',
+            $templatePath ?? 'hommform/email/html',
             ['payload' => $payload, 'confirmation' => $confirmation],
             $templatePath ? View::TEMPLATE_MODE_SITE : View::TEMPLATE_MODE_CP
         );
@@ -254,10 +254,10 @@ class FormService extends Component
 
     public function getTextBody(array $payload, ?string $confirmation = null): string
     {
-        $templatePath = HOMMFormViewer::$plugin->getSettings()->textMailTemplatePath;
+        $templatePath = HOMMForm::$plugin->getSettings()->textMailTemplatePath;
 
         return Craft::$app->view->renderTemplate(
-            $templatePath ?? 'hommformviewer/email/text',
+            $templatePath ?? 'hommform/email/text',
             ['payload' => $payload, 'confirmation' => $confirmation],
             $templatePath ? View::TEMPLATE_MODE_SITE : View::TEMPLATE_MODE_CP
         );

@@ -1,19 +1,20 @@
 {
-    "name": "homm/hommformviewer",
-    "description": "Show form requests in the control panel",
+    "name": "homm/hommform",
+    "description": "Submit and view forms",
     "type": "craft-plugin",
-    "version": "3.1.0-dev",
+    "version": "4.0.0-dev",
     "keywords": [
         "craft",
         "cms",
         "craftcms",
         "craft-plugin",
-        "hommformviewer",
-        "form requests viewer"
+        "hommform",
+        "form",
+        "form viewer"
     ],
     "support": {
-        "docs": "https://github.com/HOMMinteractive/hommformviewer/blob/master/README.md",
-        "issues": "https://github.com/HOMMinteractive/hommformviewer/issues"
+        "docs": "https://github.com/HOMMinteractive/hommform/blob/master/README.md",
+        "issues": "https://github.com/HOMMinteractive/hommform/issues"
     },
     "license": "MIT",
     "authors": [
@@ -34,17 +35,17 @@
     },
     "autoload": {
         "psr-4": {
-          "homm\\hommformviewer\\": "src/"
+          "homm\\hommform\\": "src/"
         }
     },
     "extra": {
-        "name": "HOMM Form Viewer",
-        "handle": "hommformviewer",
+        "name": "HOMM Form",
+        "handle": "hommform",
         "developer": "HOMM interactive",
         "developerUrl": "https://github.com/HOMMinteractive",
-        "documentationUrl": "https://github.com/HOMMinteractive/hommformviewer/blob/master/README.md",
-        "changelogUrl": "https://raw.githubusercontent.com/HOMMinteractive/hommformviewer/master/CHANGELOG.md",
-        "class": "homm\\hommformviewer\\HOMMFormViewer"
+        "documentationUrl": "https://github.com/HOMMinteractive/hommform/blob/master/README.md",
+        "changelogUrl": "https://raw.githubusercontent.com/HOMMinteractive/hommform/master/CHANGELOG.md",
+        "class": "homm\\hommform\\HOMMForm"
     },
     "config": {
         "allow-plugins": {

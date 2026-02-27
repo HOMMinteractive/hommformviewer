@@ -1,6 +1,6 @@
 <?php
 /**
- * HOMMFormViewer plugin for Craft CMS 5.x
+ * HOMMForm plugin for Craft CMS 5.x
  *
  * Show form requests in the control panel
  *
@@ -8,23 +8,23 @@
  * @copyright Copyright (c) 2019 HOMM interactive
  */
 
-namespace homm\hommformviewer\services;
+namespace homm\hommform\services;
 
 use craft\db\Query;
 use craft\base\Component;
 
 /**
  * @author    Domenik Hofer
- * @package   HOMMFormViewer
+ * @package   HOMMForm
  * @since     1.0.0
  */
-class FormViewerService extends Component
+class ViewerService extends Component
 {
     private function query(): Query
     {
         return (new Query())
             ->select(['*'])
-            ->from(['{{%homm_formviewer_submissions}}']);
+            ->from(['{{%homm_form_submissions}}']);
     }
 
     // Public Methods
@@ -103,7 +103,7 @@ class FormViewerService extends Component
     {
         return (new Query())
             ->createCommand()
-            ->delete('{{%homm_formviewer_submissions}}', ['formId' => $form])
+            ->delete('{{%homm_form_submissions}}', ['formId' => $form])
             ->execute();
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * HOMMFormViewer plugin for Craft CMS 5.x
+ * HOMMForm plugin for Craft CMS 5.x
  *
  * Show form requests in the control panel
  *
@@ -8,13 +8,13 @@
  * @copyright Copyright (c) 2019 HOMM interactive
  */
 
-namespace homm\hommformviewer\models;
+namespace homm\hommform\models;
 
 
 use craft\base\Model;
 
 /**
- * Hommformviewer Settings Model
+ * HOMM Form Settings Model
  *
  * This is a model used to define the plugin's settings.
  *
@@ -24,7 +24,7 @@ use craft\base\Model;
  * https://craftcms.com/docs/plugins/models
  *
  * @author    Domenik Hofer
- * @package   HOMMFormViewer
+ * @package   HOMMForm
  * @since     1.0.0
  */
 class Settings extends Model
