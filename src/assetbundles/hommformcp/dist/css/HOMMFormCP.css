@@ -3,14 +3,14 @@
  *
  * Index Field CSS
  *
- * @author    Domenik Hofer
- * @copyright Copyright (c) 2019 HOMM interactive
+ * @author    Benjamin Ammann
+ * @copyright Copyright (c) 2026 HOMM interactive
  * @link      https://github.com/HOMMinteractive
  * @package   HOMMForm
- * @since     1.0.0
+ * @since     4.0.0
  */
 
- .hommform__table {
+.hommform__table {
     width: 100%;
     overflow-x: auto;
     max-height: calc(100vh - 300px);

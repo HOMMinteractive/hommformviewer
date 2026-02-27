@@ -3,20 +3,20 @@
  *
  * Index Field JS
  *
- * @author    Domenik Hofer
- * @copyright Copyright (c) 2019 HOMM interactive
+ * @author    Benjamin Ammann
+ * @copyright Copyright (c) 2026 HOMM interactive
  * @link      https://github.com/HOMMinteractive
  * @package   HOMMForm
- * @since     1.0.0
+ * @since     4.0.0
  */
 
 
-let $tr = document.querySelectorAll('.hommform__table tbody tr');
+let tableRows = document.querySelectorAll('.hommform__table tbody tr');
 
 document.querySelector('.hommform_search').addEventListener('keyup', function (e) {
     let search = e.target.value.toLocaleLowerCase();
 
-    $tr.forEach(function ($tr) {
+    tableRows.forEach(function ($tr) {
         if ($tr.innerHTML.toLocaleLowerCase().includes(search)) {
             $tr.style.display = ''
         } else {

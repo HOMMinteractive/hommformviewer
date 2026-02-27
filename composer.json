@@ -19,12 +19,12 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "Domenik Hofer",
-            "homepage": "https://www.homm.ch"
-        },
-        {
             "name": "Benjamin Ammann",
             "homepage": "https://github.com/ammannbe"
+        },
+        {
+            "name": "Domenik Hofer",
+            "homepage": "https://www.homm.ch"
         }
     ],
     "require": {

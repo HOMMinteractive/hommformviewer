@@ -5,13 +5,13 @@
  * Show form requests in the control panel
  *
  * @link      https://github.com/HOMMinteractive
- * @copyright Copyright (c) 2019 HOMM interactive
+ * @copyright Copyright (c) 2026 HOMM interactive
  */
 
 /**
  * @author    Benjamin Ammann
  * @package   HOMMForm
- * @since     2.0.0
+ * @since     4.0.0
  */
 return [
     '{name} plugin loaded' => '{name} plugin loaded',

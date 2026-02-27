@@ -5,7 +5,7 @@
  * Show form requests in the control panel
  *
  * @link      https://github.com/HOMMinteractive
- * @copyright Copyright (c) 2019 HOMM interactive
+ * @copyright Copyright (c) 2026 HOMM interactive
  */
 
 namespace homm\hommform;
@@ -25,9 +25,9 @@ use yii\base\Event;
 /**
  * Class HOMMForm
  *
- * @author    Domenik Hofer
+ * @author    Benjamin Ammann
  * @package   HOMMForm
- * @since     1.0.0
+ * @since     4.0.0
  *
  * @property  ViewerService $viewerService
  * @property  SubmitService $SubmitService

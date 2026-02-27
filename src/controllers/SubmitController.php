@@ -5,7 +5,7 @@
  * Show form requests in the control panel
  *
  * @link      https://github.com/HOMMinteractive
- * @copyright Copyright (c) 2019 HOMM interactive
+ * @copyright Copyright (c) 2026 HOMM interactive
  */
 
 namespace homm\hommform\controllers;
@@ -16,9 +16,9 @@ use homm\hommform\HOMMForm;
 use yii\base\Response;
 
 /**
- * @author    Domenik Hofer
+ * @author    Benjamin Ammann
  * @package   HOMMForm
- * @since     0.0.1
+ * @since     4.0.0
  */
 class SubmitController extends Controller
 {
