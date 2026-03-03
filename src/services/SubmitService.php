@@ -57,7 +57,40 @@ class SubmitService extends Component
         return $slug;
     }
 
-    public function validateReCaptcha(string $recaptcha_response): bool
+    public function recaptcha(array $options = []): string
+    {
+        $uniqid = uniqid();
+        $secret = App::parseEnv(HOMMForm::$plugin->getSettings()->recaptchaSecret);
+        $siteKey = App::parseEnv(HOMMForm::$plugin->getSettings()->recaptchaSiteKey);
+
+        if (! $secret || ! $siteKey) {
+            return '';
+        }
+
+        $options = json_encode($options);
+
+        return <<<HTML
+            <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response-{$uniqid}">
+
+            <script src="https://www.google.com/recaptcha/api.js?onload=onloadRecaptcha&render={$siteKey}" async defer></script>
+            <script>
+                function onloadRecaptcha() {
+                    grecaptcha.ready(function () {
+                        grecaptcha.execute('{$siteKey}', {$options}).then(function (token) {
+                            document.querySelectorAll('[name="g-recaptcha-response"]').forEach(function (el) {
+                                el.value = token;
+                            });
+                        });
+                    });
+                }
+
+                /* run every 30 seconds to prevent timeout issues */
+                setInterval(onloadRecaptcha, 30000);
+            </script>
+        HTML;
+    }
+
+    public function validateReCaptcha(string $response): bool
     {
         $secret = App::parseEnv(HOMMForm::$plugin->getSettings()->recaptchaSecret);
         $scoreThreshold = HOMMForm::$plugin->getSettings()->recaptchaScoreThreshold;
@@ -71,7 +104,7 @@ class SubmitService extends Component
             $response = Craft::createGuzzleClient()->get(self::RECAPTCHA_URL, [
                 'query' => [
                     'secret' => $secret,
-                    'response' => $recaptcha_response,
+                    'response' => $response,
                 ],
             ]);
         } catch (\Throwable $th) {
@@ -119,8 +152,8 @@ class SubmitService extends Component
 
         $ip = $request->getUserIP();
 
-        $recaptcha_response = $request->getBodyParam('recaptcha_response');
-        unset($payload['recaptcha_response']);
+        $recaptchaResponse = $request->getBodyParam('g-recaptcha-response');
+        unset($payload['g-recaptcha-response']);
 
         $confirmation = $request->getBodyParam('confirmation');
         unset($payload['confirmation']);
@@ -152,7 +185,7 @@ class SubmitService extends Component
             $receivers,
             $subject,
             $replyto,
-            $recaptcha_response,
+            $recaptchaResponse,
             $ip,
             $payload,
             $confirmation,

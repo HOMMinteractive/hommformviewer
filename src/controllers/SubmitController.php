@@ -52,13 +52,13 @@ class SubmitController extends Controller
             $receivers,
             $subject,
             $replyto,
-            $recaptcha_response,
+            $recaptchaResponse,
             $ip,
             $payload,
             $confirmation,
         ] = HOMMForm::$plugin->submitService->parseBodyParams(Craft::$app->getRequest(), $dateCreated);
 
-        if (! HOMMForm::$plugin->submitService->validateReCaptcha($recaptcha_response)) {
+        if (! HOMMForm::$plugin->submitService->validateReCaptcha($recaptchaResponse)) {
             $errors[] = [
                 'error' => 'recaptcha_verification_failed',
                 'message' => Craft::t('hommform', 'Failed to verify reCAPTCHA response'),
@@ -75,7 +75,7 @@ class SubmitController extends Controller
             $payload,
             $ip,
             $dateCreated,
-            $recaptcha_response
+            $recaptchaResponse
         );
 
         if (! empty($errors)) {

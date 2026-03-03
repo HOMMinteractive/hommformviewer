@@ -41,6 +41,9 @@ Example form submission:
     {{ hiddenInput('receivers', entry.receivers|hash) }}
     {{ hiddenInput('subject', entry.subject|hash) }}
 
+    {# Optional: if recaptcha secret is provided #}
+    {{ craft.hommform.recaptcha | raw }}
+
     {# Optional: set a redirection URL #}
     {{ redirectInput('redirect/to/page') }}
 

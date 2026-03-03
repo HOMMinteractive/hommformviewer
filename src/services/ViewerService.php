@@ -53,7 +53,7 @@ class ViewerService extends Component
             $payload = json_decode($payload, true);
 
             unset(
-                $payload['recaptcha_response'],
+                $payload['g-recaptcha-response'],
                 $payload['CRAFT_CSRF_TOKEN'],
                 $payload['redirect']
             );

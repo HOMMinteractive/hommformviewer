@@ -34,4 +34,9 @@ class HOMMFormVariable
     {
         return HOMMForm::$plugin->viewerService->entries($form);
     }
+
+    public function recaptcha(): string
+    {
+        return HOMMForm::$plugin->submitService->recaptcha();
+    }
 }
