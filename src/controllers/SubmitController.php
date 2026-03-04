@@ -59,10 +59,7 @@ class SubmitController extends Controller
         ] = HOMMForm::$plugin->submitService->parseBodyParams(Craft::$app->getRequest(), $dateCreated);
 
         if (! HOMMForm::$plugin->submitService->validateReCaptcha($recaptchaResponse)) {
-            $errors[] = [
-                'error' => 'recaptcha_verification_failed',
-                'message' => Craft::t('hommform', 'Failed to verify reCAPTCHA response'),
-            ];
+            $errors[] = HOMMForm::$plugin->errorService->recaptchaValidationFailed();
 
             return $this->sendResponse($errors);
         }
@@ -91,10 +88,7 @@ class SubmitController extends Controller
         );
 
         if (! $sent) {
-            $errors[] = [
-                'error' => 'email_sending_failed',
-                'message' => Craft::t('hommform', 'Failed to send email notification'),
-            ];
+            $errors[] = HOMMForm::$plugin->errorService->sendEmailFailed();
         }
 
         return $this->sendResponse($errors);

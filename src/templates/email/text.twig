@@ -4,7 +4,7 @@
 
 {% for key, item in payload %}
 {% if item.name is defined and item.folder is defined -%}
-{{ key }}: {{ cpUrl('hommform/download/' ~ item.folder ~ '/' ~ item.name) }}
+{{ key }}: {{ confirmation ? item.name : cpUrl('hommform/download/' ~ item.folder ~ '/' ~ item.name) }}
 {% elseif item is array -%}
 {{ key }}:
 {% for value in item|map(v => v is array ? v : [v]) -%}

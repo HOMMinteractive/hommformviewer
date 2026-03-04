@@ -159,7 +159,7 @@ class SubmitService extends Component
         unset($payload['confirmation']);
 
         $submissionId = $dateCreated->format('Ymd-His') . '-' . bin2hex(random_bytes(4));
-        foreach (array_keys($_FILES) as $key) {
+        foreach (array_keys($_FILES) as $i => $key) {
             $file = UploadedFile::getInstancesByName($key)[0] ?? null;
 
             if (! ($file instanceof UploadedFile)) {
@@ -168,7 +168,7 @@ class SubmitService extends Component
 
             $payload[$key] = [
                 'file' => $file,
-                'name' => $this->slugify($file->baseName) . '.' . $file->extension,
+                'name' => $this->slugify($file->baseName) . '-' . ($i + 1) . '.' . $file->extension,
                 'folder' => $submissionId,
                 'storage' => HOMMForm::$plugin->getSettings()->storagePath,
             ];
@@ -208,31 +208,19 @@ class SubmitService extends Component
             }
 
             if (! in_array(strtolower($file->extension), self::ALLOWED_FILE_TYPES)) {
-                $errors[] = [
-                    'error' => 'file_type_not_allowed',
-                    'name' => $file->name,
-                    'message' => Craft::t('hommform', 'File type not allowed'),
-                ];
+                $errors[] = HOMMForm::$plugin->errorService->fileTypeNotAllowed();
 
                 continue;
             }
 
             if (! FileHelper::createDirectory($folderpath)) {
-                $errors[] = [
-                    'error' => 'directory_creation_failed',
-                    'name' => $file->name,
-                    'message' => Craft::t('hommform', 'Failed to create directory'),
-                ];
+                $errors[] = HOMMForm::$plugin->errorService->folderCreationFailed();
 
                 continue;
             }
 
             if (! $file->saveAs($filepath)) {
-                $errors[] = [
-                    'error' => 'upload_failed',
-                    'name' => $file->name,
-                    'message' => Craft::t('hommform', 'Failed to upload file'),
-                ];
+                $errors[] = HOMMForm::$plugin->errorService->fileUploadFailed();
 
                 continue;
             }
@@ -259,16 +247,10 @@ class SubmitService extends Component
                 ->execute();
 
             if ($insert <= 0) {
-                $errors[] = [
-                    'error' => 'database_error',
-                    'message' => Craft::t('hommform', 'Failed to insert form data'),
-                ];
+                $errors[] = HOMMForm::$plugin->errorService->databaseError();
             }
         } catch (\Throwable $th) {
-            $errors[] = [
-                'error' => 'database_error',
-                'message' => Craft::t('hommform', 'Failed to save form data'),
-            ];
+            $errors[] = HOMMForm::$plugin->errorService->databaseError();
         }
 
         return $errors;

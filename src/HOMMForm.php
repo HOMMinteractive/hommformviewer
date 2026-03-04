@@ -19,6 +19,7 @@ use craft\web\UrlManager;
 use homm\hommform\models\Settings;
 use homm\hommform\services\ViewerService;
 use homm\hommform\services\SubmitService;
+use homm\hommform\services\ErrorService;
 use homm\hommform\variables\HOMMFormVariable;
 use yii\base\Event;
 
@@ -30,7 +31,8 @@ use yii\base\Event;
  * @since     4.0.0
  *
  * @property  ViewerService $viewerService
- * @property  SubmitService $SubmitService
+ * @property  SubmitService $submitService
+ * @property  ErrorService  $errorService
  */
 class HOMMForm extends Plugin
 {
@@ -71,6 +73,7 @@ class HOMMForm extends Plugin
         $this->setComponents([
             'viewerService' => ViewerService::class,
             'submitService' => SubmitService::class,
+            'errorService' => ErrorService::class,
         ]);
 
         $this->hasCpSection = HOMMForm::$plugin->getSettings()->enableCpSection;

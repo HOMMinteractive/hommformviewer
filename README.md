@@ -63,11 +63,20 @@ Example form submission:
 
 After submitting a form, you can view, search and export them in the control panel.
 
+## Form submission error codes:
+
+- `C955-JTS0`: Failed to verify reCAPTCHA response
+- `WFQT-OMCT`: Failed to send email notification
+- `PYZF-XFZK`: File type not allowed
+- `1RUU-EUNT`: Failed to upload file
+- `AL1R-ZCW3`: Failed to create upload folder
+- `1DGS-46UW`: Failed to insert form data
+
 ## HOMM Form Roadmap
 
 Some things to do, and ideas for potential features:
 
-* Set flash messages if the form wasn't submitted through javascript
+* Set flash messages if the form was submitted through a normal form request instead of `Content-Type: application/json`
 * You'll let us know...
 
 Brought to you by [HOMM interactive](https://github.com/HOMMinteractive)
