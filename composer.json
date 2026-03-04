@@ -2,7 +2,7 @@
     "name": "homm/hommform",
     "description": "Submit and view forms",
     "type": "craft-plugin",
-    "version": "4.0.0-rc2",
+    "version": "4.0.0-rc3",
     "keywords": [
         "craft",
         "cms",

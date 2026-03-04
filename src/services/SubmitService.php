@@ -278,7 +278,7 @@ class SubmitService extends Component
         );
     }
 
-    public function send(string $receivers, string $replyto, string $subject, array $payload, string $confirmation): bool
+    public function send(string $receivers, string $replyto, string $subject, array $payload, ?string $confirmation = null): bool
     {
         $sent = Craft::$app->getMailer()->compose()
             ->setTo(explode(',', $receivers))
