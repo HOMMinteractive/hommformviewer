@@ -16,10 +16,12 @@ use craft\db\Query;
 use craft\base\Component;
 use craft\helpers\App;
 use craft\helpers\FileHelper;
+use craft\helpers\StringHelper;
 use craft\web\UploadedFile;
 use craft\web\View;
 use DateTime;
 use homm\hommform\HOMMForm;
+use homm\hommform\models\Submission;
 use yii\web\Request;
 
 /**
@@ -29,34 +31,28 @@ use yii\web\Request;
  */
 class SubmitService extends Component
 {
-    private const ALLOWED_FILE_TYPES = [
-        'jpg', 'jpeg', 'eps', 'png', 'svg',
-        'pdf', 'doc', 'docx', 'xlsx', 'xls', 'odt', 'ods', 'odp',
-        'txt', 'csv', 'rtf',
-    ];
-
     private const RECAPTCHA_URL = 'https://www.google.com/recaptcha/api/siteverify';
 
-    private function slugify(string $string): string
+    private function getAllowedFileTypes(): array
     {
-        // Convert the string to lowercase
-        $slug = mb_strtolower($string);
+        $settings = HOMMForm::$plugin->getSettings();
 
-        // Replace spaces with hyphens
-        $slug = str_replace(' ', '-', $slug);
+        if (! is_array($settings->allowedFileTypes)) {
+            return explode(',', $settings->allowedFileTypes);
+        }
 
-        // Remove special characters
-        $slug = preg_replace('/[^\w\-]/', '', $slug);
-
-        // Remove consecutive hyphens
-        $slug = preg_replace('/\-\-+/', '-', $slug);
-
-        // Trim leading and trailing hyphens
-        $slug = trim($slug, '-');
-
-        return $slug;
+        return $settings->allowedFileTypes;
     }
 
+    /**
+     * Returns the HTML/JS snippet required to render an invisible reCAPTCHA
+     * token input.  Options are passed through to the client‑side
+     * &#64;grecaptcha.execute call.
+     *
+     * An empty string is returned when the site key/secret are not configured.
+     *
+     * @param array $options additional parameters for the JS API, e.g. ['action' => 'submit']
+     */
     public function recaptcha(array $options = []): string
     {
         $uniqid = uniqid();
@@ -90,6 +86,12 @@ class SubmitService extends Component
         HTML;
     }
 
+    /**
+     * Verify a reCAPTCHA token.
+     *
+     * @param string $response the value from the g-recaptcha-response field
+     * @return bool whether the token is valid and meets the score threshold
+     */
     public function validateReCaptcha(string $response): bool
     {
         $secret = App::parseEnv(HOMMForm::$plugin->getSettings()->recaptchaSecret);
@@ -131,104 +133,113 @@ class SubmitService extends Component
         return true;
     }
 
-    public function parseBodyParams(Request $request, DateTime $dateCreated): array
+    public function parseSubmission(Request $request): Submission
     {
-        $payload = $request->getBodyParams();
+        $dateCreated = new DateTime();
+        $submission = new Submission();
+        $submission->dateCreated = $dateCreated;
 
-        unset($payload['CRAFT_CSRF_TOKEN']);
-        unset($payload['redirect']);
+        $bodyParams = $request->getBodyParams();
 
-        $formId = $request->getBodyParam('formId');
-        unset($payload['formId']);
+        // basic scalar values we care about
+        $submission->formId = $request->getBodyParam('formId');
+        $submission->receivers = $request->getValidatedBodyParam('receivers');
+        $submission->subject = $request->getValidatedBodyParam('subject');
 
-        $receivers = $request->getValidatedBodyParam('receivers');
-        unset($payload['receivers']);
+        $replyToField = $request->getValidatedBodyParam('replyto');
+        $submission->replyto = $bodyParams[$replyToField] ?? null;
 
-        $subject = $request->getValidatedBodyParam('subject');
-        unset($payload['subject']);
+        $submission->ip = $request->getUserIP();
+        $submission->recaptchaResponse = $request->getBodyParam('g-recaptcha-response');
+        $submission->confirmation = $request->getBodyParam('confirmation');
 
-        $replyto = $payload[$request->getValidatedBodyParam('replyto')] ?? null;
-        unset($payload['replyto']);
+        // remove the elements that belong in the payload instead of the
+        // metadata object
+        $discard = [
+            'CRAFT_CSRF_TOKEN',
+            'redirect',
+            'formId',
+            'receivers',
+            'subject',
+            'replyto',
+            'g-recaptcha-response',
+            'confirmation',
+        ];
+        foreach ($discard as $key) {
+            unset($bodyParams[$key]);
+        }
 
-        $ip = $request->getUserIP();
-
-        $recaptchaResponse = $request->getBodyParam('g-recaptcha-response');
-        unset($payload['g-recaptcha-response']);
-
-        $confirmation = $request->getBodyParam('confirmation');
-        unset($payload['confirmation']);
-
+        // Attach upload metadata
         $submissionId = $dateCreated->format('Ymd-His') . '-' . bin2hex(random_bytes(4));
+
         foreach (array_keys($_FILES) as $i => $key) {
             $file = UploadedFile::getInstancesByName($key)[0] ?? null;
-
             if (! ($file instanceof UploadedFile)) {
                 continue;
             }
 
-            $payload[$key] = [
+            $bodyParams[$key] = [
                 'file' => $file,
-                'name' => $this->slugify($file->baseName) . '-' . ($i + 1) . '.' . $file->extension,
+                'name' => StringHelper::slugify($file->baseName) . '-' . ($i + 1) . '.' . $file->extension,
                 'folder' => $submissionId,
                 'storage' => HOMMForm::$plugin->getSettings()->storagePath,
             ];
         }
 
-        foreach ($payload as $key => $item) {
+        // attempt to decode JSON strings
+        foreach ($bodyParams as $key => $item) {
             if (is_string($item) && json_validate($item)) {
-                $payload[$key] = json_decode($item, true);
+                $bodyParams[$key] = json_decode($item, true);
             }
         }
 
-        return [
-            $formId,
-            $receivers,
-            $subject,
-            $replyto,
-            $recaptchaResponse,
-            $ip,
-            $payload,
-            $confirmation,
-        ];
+        $submission->payload = $bodyParams;
+        return $submission;
     }
 
-    public function save(string $formId, string $receivers, string $replyto, string $subject, array $payload, string $ip, DateTime $dateCreated): array
+    /**
+     * Persist a submission to the database and move any uploaded files to the
+     * configured storage location.
+     *
+     * @param Submission $submission
+     * @return array An array of error structures. Empty when the operation succeeded.
+     */
+    public function save(Submission $submission): array
     {
         $errors = [];
+        $allowed = array_map('strtolower', $this->getAllowedFileTypes());
 
-        foreach ($payload as $key => $value) {
+        foreach ($submission->payload as $key => $value) {
             $file = $value['file'] ?? null;
-            $filepath = isset($value['folder']) && isset($value['name']) && isset($value['storage'])
+            $filepath = isset($value['folder'], $value['name'], $value['storage'])
                 ? Craft::getAlias($value['storage'] . '/' . $value['folder'] . '/' . $value['name'])
                 : null;
-            $folderpath = dirname($filepath);
+            $folderpath = $filepath ? dirname($filepath) : null;
 
             if (! $file instanceof UploadedFile) {
                 continue;
             }
 
-            if (! in_array(strtolower($file->extension), self::ALLOWED_FILE_TYPES)) {
+            if (! in_array(strtolower($file->extension), $allowed, true)) {
                 $errors[] = HOMMForm::$plugin->errorService->fileTypeNotAllowed();
-
                 continue;
             }
 
             if (! FileHelper::createDirectory($folderpath)) {
                 $errors[] = HOMMForm::$plugin->errorService->folderCreationFailed();
-
                 continue;
             }
 
             if (! $file->saveAs($filepath)) {
                 $errors[] = HOMMForm::$plugin->errorService->fileUploadFailed();
-
                 continue;
             }
 
-            unset($payload[$key]['file']);
+            // remove the UploadedFile instance so the payload can be JSON encoded
+            unset($submission->payload[$key]['file']);
         }
 
-        if (count($errors)) {
+        if (! empty($errors)) {
             return $errors;
         }
 
@@ -236,13 +247,13 @@ class SubmitService extends Component
             $insert = (new Query())
                 ->createCommand()
                 ->insert('{{%homm_form_submissions}}', [
-                    'formId' => $formId,
-                    'receivers' => $receivers,
-                    'replyto' => $replyto,
-                    'subject' => $subject,
-                    'payload' => $payload,
-                    'ip' => $ip,
-                    'dateCreated' => $dateCreated->format('Y-m-d H:i:s'),
+                    'formId' => $submission->formId,
+                    'receivers' => $submission->receivers,
+                    'replyto' => $submission->replyto,
+                    'subject' => $submission->subject,
+                    'payload' => $submission->payload,
+                    'ip' => $submission->ip,
+                    'dateCreated' => $submission->dateCreated->format('Y-m-d H:i:s'),
                 ])
                 ->execute();
 
@@ -278,25 +289,34 @@ class SubmitService extends Component
         );
     }
 
-    public function send(string $receivers, string $replyto, string $subject, array $payload, ?string $confirmation = null): bool
+    public function send(string $receivers, ?string $replyto, string $subject, array $payload, ?string $confirmation = null): bool
     {
-        $sent = Craft::$app->getMailer()->compose()
-            ->setTo(explode(',', $receivers))
-            ->setReplyTo($replyto)
+        // send notification to configured recipients first
+        $message = Craft::$app->getMailer()->compose()
+            ->setTo(array_filter(explode(',', $receivers)))
             ->setSubject($subject)
             ->setTextBody($this->getTextBody($payload))
-            ->setHtmlBody($this->getHtmlBody($payload))
-            ->send();
+            ->setHtmlBody($this->getHtmlBody($payload));
 
-        if (! $confirmation) {
-            return $sent;
+        if ($replyto) {
+            $message->setReplyTo($replyto);
         }
 
-        return Craft::$app->getMailer()->compose()
-            ->setTo($replyto)
-            ->setSubject($subject)
-            ->setTextBody($this->getTextBody($payload, $confirmation))
-            ->setHtmlBody($this->getHtmlBody($payload, $confirmation))
-            ->send();
+        $sent = $message->send();
+        if (! $sent) {
+            return false;
+        }
+
+        // optionally send confirmation to sender
+        if ($confirmation && $replyto) {
+            return Craft::$app->getMailer()->compose()
+                ->setTo($replyto)
+                ->setSubject($subject)
+                ->setTextBody($this->getTextBody($payload, $confirmation))
+                ->setHtmlBody($this->getHtmlBody($payload, $confirmation))
+                ->send();
+        }
+
+        return true;
     }
 }

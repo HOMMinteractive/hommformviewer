@@ -38,4 +38,5 @@ return [
     'Custom template path for HTML mails' => 'Benutzerdefinierter Template-Pfad für HTML-Mails',
     'Leave empty to use the default template' => 'Leer lassen, um das Standard-Template zu verwenden',
     'Custom template path for text mails' => 'Benutzerdefinierter Template-Pfad für Text-Mails',
+    'Allowed file types (comma separated)' => 'Zulässige Dateitypen (durch Komma getrennt)',
 ];

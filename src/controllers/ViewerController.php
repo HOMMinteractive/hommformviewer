@@ -26,9 +26,14 @@ class ViewerController extends Controller
 
     public function actionDownload(string $id, string $file)
     {
+        // prevent path traversal by stripping directory separators from the
+        // uploaded file name and ensuring the id is alphanumeric/hyphen.
+        $id = preg_replace('/[^a-zA-Z0-9\-]/', '', $id);
+        $file = basename($file);
+
         $filePath = Craft::getAlias(HOMMForm::$plugin->getSettings()->storagePath) . '/' . $id . '/' . $file;
 
-        if (! file_exists($filePath)) {
+        if (! is_file($filePath)) {
             throw new \yii\web\NotFoundHttpException(Craft::t('hommform', 'File not found.'));
         }
 
@@ -40,35 +45,7 @@ class ViewerController extends Controller
         $request = Craft::$app->getRequest();
 
         $form = $request->getQueryParam('formId');
-        $entries = HOMMForm::$plugin->viewerService->entries($form);
-
-        $context = fopen('php://temp', 'r+');
-
-        // First item is the header
-        if (! empty($entries)) {
-            $headers = array_shift($entries);
-            fputcsv($context, $headers);
-
-            // Write data rows
-            foreach ($entries as $item) {
-                $rowData = [];
-                foreach ($headers as $header) {
-                    $value = $item[$header] ?? '';
-
-                    // Flatten multidimensional arrays to JSON
-                    if (is_array($value)) {
-                        $value = json_encode($value, JSON_UNESCAPED_UNICODE);
-                    }
-
-                    $rowData[] = $value;
-                }
-                fputcsv($context, $rowData);
-            }
-        }
-
-        rewind($context);
-        $csv = stream_get_contents($context);
-        fclose($context);
+        $csv = HOMMForm::$plugin->viewerService->exportCsv($form);
 
         return Craft::$app->response->sendContentAsFile($csv, $form . '.csv', ['mimeType' => 'text/csv']);
     }

@@ -31,7 +31,7 @@ class ViewerService extends Component
     // =========================================================================
 
     /**
-     * Get all form names.
+     * Return a list of form IDs for which submissions exist.
      *
      * @return string[]
      */
@@ -42,55 +42,63 @@ class ViewerService extends Component
         return array_column($result, 'formId');
     }
 
+    /**
+     * Sanitize a payload stored in the database.  This method strips control
+     * characters, removes known internal fields and attempts to JSON‑decode
+     * any strings that look like JSON.
+     */
+    private function sanitizePayload(string $raw): array
+    {
+        $payload = str_replace(["\r\n", "\t"], [' ', ' '], $raw);
+        $payload = json_decode($payload, true) ?: [];
+
+        unset(
+            $payload['g-recaptcha-response'],
+            $payload['CRAFT_CSRF_TOKEN'],
+            $payload['redirect']
+        );
+
+        foreach ($payload as $k => $v) {
+            if (is_string($v) && json_validate($v)) {
+                $payload[$k] = json_decode($v, true);
+            }
+        }
+
+        return $payload;
+    }
+
+    /**
+     * Retrieve all submissions for a given form as a two‑dimensional table.
+     * The first element of the returned array is the header row.
+     *
+     * @param string $form
+     * @return array[]
+     */
     public function entries(string $form): array
     {
         $head = ['id', 'dateCreated'];
         $body = [];
         $items = $this->query()->where(['formId' => $form])->all();
 
-        foreach ($items as $key => $item) {
-            $payload = str_replace(["\r\n","\t"], [' ', ' '], $item['payload']);
-            $payload = json_decode($payload, true);
-
-            unset(
-                $payload['g-recaptcha-response'],
-                $payload['CRAFT_CSRF_TOKEN'],
-                $payload['redirect']
-            );
-
-            $head = array_merge($head, array_keys($payload ?? []));
+        // build header keys
+        foreach ($items as $item) {
+            $payload = $this->sanitizePayload($item['payload']);
+            $head = array_merge($head, array_keys($payload));
         }
         $head = array_unique($head);
 
         foreach ($items as $item) {
-            $payload = str_replace(["\r\n","\t"], [' ', ' '], $item['payload']);
-            $payload = json_decode($payload, true);
+            $payload = $this->sanitizePayload($item['payload']);
 
             $row['id'] = $item['id'];
             $row['dateCreated'] = $item['dateCreated'];
 
             foreach ($head as $i) {
-                if (in_array($i, ['id', 'dateCreated'])) {
+                if (in_array($i, ['id', 'dateCreated'], true)) {
                     continue;
                 }
 
-                if (! isset($payload[$i])) {
-                    $row[$i] = null;
-                    continue;
-                }
-
-                if (is_array($payload[$i])) {
-                    $row[$i] = $payload[$i];
-                    continue;
-                }
-
-                $payload[$i] = str_replace("&quot;", '"', $payload[$i]);
-                if (json_validate($payload[$i])) {
-                    $row[$i] = json_decode($payload[$i], true);
-                    continue;
-                }
-
-                $row[$i] = $payload[$i] ?? '';
+                $row[$i] = $payload[$i] ?? null;
             }
 
             $body[] = $row;
@@ -105,5 +113,37 @@ class ViewerService extends Component
             ->createCommand()
             ->delete('{{%homm_form_submissions}}', ['formId' => $form])
             ->execute();
+    }
+
+    /**
+     * Return a CSV string containing all submissions for the given form.
+     */
+    public function exportCsv(string $form): string
+    {
+        $entries = $this->entries($form);
+        $context = fopen('php://temp', 'r+');
+
+        if (! empty($entries)) {
+            $headers = array_shift($entries);
+            fputcsv($context, $headers);
+
+            foreach ($entries as $item) {
+                $rowData = [];
+                foreach ($headers as $header) {
+                    $value = $item[$header] ?? '';
+                    if (is_array($value)) {
+                        $value = json_encode($value, JSON_UNESCAPED_UNICODE);
+                    }
+                    $rowData[] = $value;
+                }
+                fputcsv($context, $rowData);
+            }
+        }
+
+        rewind($context);
+        $csv = stream_get_contents($context);
+        fclose($context);
+
+        return $csv;
     }
 }

@@ -8,6 +8,8 @@
  * @copyright Copyright (c) 2026 HOMM interactive
  */
 
+use craft\helpers\App;
+
 /**
  * HOMMForm config.php
  *
@@ -23,5 +25,20 @@
  */
 
 return [
-    'table' => '0_contact',
+    'enableCpSection' => true,
+
+    // where uploaded files should be stored; accepts aliases
+    'storagePath' => App::env('HOMM_FORM_STORAGE_PATH') ?? '@storage/form',
+
+    // list of extra file extensions that may be uploaded
+    'allowedFileTypes' => ['jpg', 'jpeg', 'eps', 'png', 'svg', 'pdf', 'doc', 'docx', 'xlsx', 'xls', 'odt', 'ods', 'odp', 'txt', 'csv', 'rtf'],
+
+    // reCAPTCHA integration (site/secret keys can be pulled from env)
+    'recaptchaSiteKey' => App::env('RECAPTCHA_SITE_KEY'),
+    'recaptchaSecret' => App::env('RECAPTCHA_SECRET_KEY'),
+    'recaptchaScoreThreshold' => App::env('RECAPTCHA_SCORE_THRESHOLD'),
+
+    // custom templates for the notification emails
+    'htmlMailTemplatePath' => null,
+    'textMailTemplatePath' => null,
 ];

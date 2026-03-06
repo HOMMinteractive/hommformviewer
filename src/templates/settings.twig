@@ -31,6 +31,13 @@
     suggestEnvVars: true,
 }) }}
 
+{{ forms.textField({
+    label: 'Allowed file types (comma separated)'|t('hommform'),
+    id: 'allowedFileTypes',
+    name: 'allowedFileTypes',
+    value: settings['allowedFileTypes'] ? settings['allowedFileTypes']|join(',') : '',
+}) }}
+
 <hr>
 
 {{ forms.autosuggestField({

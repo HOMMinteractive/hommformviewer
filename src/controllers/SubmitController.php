@@ -45,46 +45,28 @@ class SubmitController extends Controller
 
         $this->requirePostRequest();
 
-        $dateCreated = new \DateTime();
+        // parse the incoming request into a strongly‑typed object
+        $submission = HOMMForm::$plugin->submitService->parseSubmission(Craft::$app->getRequest());
 
-        [
-            $formId,
-            $receivers,
-            $subject,
-            $replyto,
-            $recaptchaResponse,
-            $ip,
-            $payload,
-            $confirmation,
-        ] = HOMMForm::$plugin->submitService->parseBodyParams(Craft::$app->getRequest(), $dateCreated);
-
-        if (! HOMMForm::$plugin->submitService->validateReCaptcha($recaptchaResponse)) {
+        // verify the captcha first – if it fails we bail out immediately
+        if (! HOMMForm::$plugin->submitService->validateReCaptcha($submission->recaptchaResponse)) {
             $errors[] = HOMMForm::$plugin->errorService->recaptchaValidationFailed();
-
             return $this->sendResponse($errors);
         }
 
-        $errors = HOMMForm::$plugin->submitService->save(
-            $formId,
-            $receivers,
-            $replyto,
-            $subject,
-            $payload,
-            $ip,
-            $dateCreated,
-            $recaptchaResponse
-        );
-
+        // persist data + handle any uploads
+        $errors = HOMMForm::$plugin->submitService->save($submission);
         if (! empty($errors)) {
             return $this->sendResponse($errors);
         }
 
+        // send notifications (and confirmation mail if requested)
         $sent = HOMMForm::$plugin->submitService->send(
-            $receivers,
-            $replyto,
-            $subject,
-            $payload,
-            $confirmation
+            $submission->receivers,
+            $submission->replyto,
+            $submission->subject,
+            $submission->payload,
+            $submission->confirmation
         );
 
         if (! $sent) {

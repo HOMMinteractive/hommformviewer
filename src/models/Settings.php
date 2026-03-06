@@ -36,6 +36,12 @@ class Settings extends Model
 
     public ?string $storagePath = '@storage/form';
 
+    public array $allowedFileTypes = [
+        'jpg', 'jpeg', 'eps', 'png', 'svg',
+        'pdf', 'doc', 'docx', 'xlsx', 'xls', 'odt', 'ods', 'odp',
+        'txt', 'csv', 'rtf',
+    ];
+
     public ?string $recaptchaSiteKey = null;
 
     public ?string $recaptchaSecret = null;
@@ -67,6 +73,9 @@ class Settings extends Model
 
             ['storagePath', 'string'],
             ['storagePath', 'default', 'value' => '@storage/form'],
+
+            ['allowedFileTypes', 'each', 'rule' => ['string']],
+            ['allowedFileTypes', 'default', 'value' => []],
 
             ['recaptchaSiteKey', 'string'],
             ['recaptchaSecret', 'string'],
