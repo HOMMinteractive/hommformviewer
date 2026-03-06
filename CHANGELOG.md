@@ -9,7 +9,8 @@ to [Semantic Versioning](http://semver.org/).
 
 - renamed plugin
 - added form submit feature
-- added control panel settings
+- added control panel and config settings
+- added recaptcha validation and render variable
 
 ## 3.0.2 - 2025-10-24
 
