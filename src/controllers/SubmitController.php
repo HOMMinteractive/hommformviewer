@@ -22,6 +22,8 @@ use yii\base\Response;
  */
 class SubmitController extends Controller
 {
+    protected array|bool|int $allowAnonymous = true;
+
     private function sendResponse(array $errors = []): Response
     {
         $request = Craft::$app->getRequest();
