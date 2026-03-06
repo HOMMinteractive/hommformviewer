@@ -1,20 +1,20 @@
 <?php
 /**
- * HOMMFormViewer plugin for Craft CMS 5.x
+ * HOMMForm plugin for Craft CMS 5.x
  *
  * Show form requests in the control panel
  *
  * @link      https://github.com/HOMMinteractive
- * @copyright Copyright (c) 2019 HOMM interactive
+ * @copyright Copyright (c) 2026 HOMM interactive
  */
 
-namespace homm\hommformviewer\models;
+namespace homm\hommform\models;
 
 
 use craft\base\Model;
 
 /**
- * Hommformviewer Settings Model
+ * HOMM Form Settings Model
  *
  * This is a model used to define the plugin's settings.
  *
@@ -23,19 +23,34 @@ use craft\base\Model;
  *
  * https://craftcms.com/docs/plugins/models
  *
- * @author    Domenik Hofer
- * @package   HOMMFormViewer
- * @since     1.0.0
+ * @author    Benjamin Ammann
+ * @package   HOMMForm
+ * @since     4.0.0
  */
 class Settings extends Model
 {
     // Public Properties
     // =========================================================================
 
-    /**
-     * @var string
-     */
-    public string $table = '0_contact';
+    public bool $enableCpSection = true;
+
+    public ?string $storagePath = '@storage/form';
+
+    public array $allowedFileTypes = [
+        'jpg', 'jpeg', 'eps', 'png', 'svg',
+        'pdf', 'doc', 'docx', 'xlsx', 'xls', 'odt', 'ods', 'odp',
+        'txt', 'csv', 'rtf',
+    ];
+
+    public ?string $recaptchaSiteKey = null;
+
+    public ?string $recaptchaSecret = null;
+
+    public float $recaptchaScoreThreshold = 0.5;
+
+    public ?string $htmlMailTemplatePath = null;
+
+    public ?string $textMailTemplatePath = null;
 
     // Public Methods
     // =========================================================================
@@ -53,8 +68,26 @@ class Settings extends Model
     public function rules(): array
     {
         return [
-            ['table', 'string'],
-            ['table', 'default', 'value' => '0_contact'],
+            ['enableCpSection', 'boolean'],
+            ['enableCpSection', 'default', 'value' => true],
+
+            ['storagePath', 'string'],
+            ['storagePath', 'default', 'value' => '@storage/form'],
+
+            ['allowedFileTypes', 'each', 'rule' => ['string']],
+            ['allowedFileTypes', 'default', 'value' => []],
+
+            ['recaptchaSiteKey', 'string'],
+            ['recaptchaSecret', 'string'],
+
+            ['recaptchaScoreThreshold', 'number', 'min' => 0, 'max' => 1],
+            ['recaptchaScoreThreshold', 'default', 'value' => 0.5],
+
+            ['htmlMailTemplatePath', 'string'],
+            ['htmlMailTemplatePath', 'default', 'value' => null],
+
+            ['textMailTemplatePath', 'string'],
+            ['textMailTemplatePath', 'default', 'value' => null],
         ];
     }
 }

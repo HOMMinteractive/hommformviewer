@@ -1,25 +1,24 @@
 <?php
 /**
- * HOMMFormViewer plugin for Craft CMS 5.x
+ * HOMMForm plugin for Craft CMS 5.x
  *
  * Show form requests in the control panel
  *
  * @link      https://github.com/HOMMinteractive
- * @copyright Copyright (c) 2019 HOMM interactive
+ * @copyright Copyright (c) 2026 HOMM interactive
  */
 
-namespace homm\hommformviewer\assetbundles\hommformviewercp;
+namespace homm\hommform\assetbundles\hommformcp;
 
-use Craft;
 use craft\web\AssetBundle;
 use craft\web\assets\cp\CpAsset;
 
 /**
- * @author    Domenik Hofer
- * @package   HOMMFormViewer
- * @since     1.0.0
+ * @author    Benjamin Ammann
+ * @package   HOMMForm
+ * @since     4.0.0
  */
-class HOMMFormViewerCPAsset extends AssetBundle
+class HOMMFormCPAsset extends AssetBundle
 {
     // Public Methods
     // =========================================================================
@@ -29,7 +28,7 @@ class HOMMFormViewerCPAsset extends AssetBundle
      */
     public function init()
     {
-        $this->sourcePath = "@homm/hommformviewer/assetbundles/hommformviewercp/dist";
+        $this->sourcePath = "@homm/hommform/assetbundles/hommformcp/dist";
 
         // define the dependencies
         $this->depends = [
@@ -37,11 +36,11 @@ class HOMMFormViewerCPAsset extends AssetBundle
         ];
 
         $this->js = [
-            'js/HOMMFormViewerCP.js',
+            'js/HOMMFormCP.js',
         ];
 
         $this->css = [
-            'css/HOMMFormViewerCP.css',
+            'css/HOMMFormCP.css',
         ];
 
         parent::init();

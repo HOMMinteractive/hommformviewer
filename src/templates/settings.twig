@@ -1,23 +1,88 @@
 {# @var craft \craft\web\twig\variables\CraftVariable #}
 {#
 /**
- * HOMM Form Viewer plugin for Craft CMS 5.x
+ * HOMM Form plugin for Craft CMS 5.x
  *
- * HOMMFormViewer settings.twig
+ * HOMMForm settings.twig
  *
- * @author    Domenik Hofer
- * @copyright Copyright (c) 2019 HOMM interactive
+ * @author    Benjamin Ammann
+ * @copyright Copyright (c) 2026 HOMM interactive
  * @link      https://github.com/HOMMinteractive
- * @package   HOMMFormViewer
- * @since     1.0.0
+ * @package   HOMMForm
+ * @since     4.0.0
  */
 #}
 
 {% import "_includes/forms" as forms %}
 
+{{ forms.lightswitchField({
+    label: 'Enable Control Panel section'|t('hommform'),
+    id: 'enableCpSection',
+    name: 'enableCpSection',
+    on: settings['enableCpSection'],
+}) }}
+
+{{ forms.autosuggestField({
+    label: 'Storage path for attachments'|t('hommform'),
+    id: 'storagePath',
+    name: 'storagePath',
+    value: settings['storagePath'],
+    suggestAliases: true,
+    suggestEnvVars: true,
+}) }}
+
 {{ forms.textField({
-    label: 'Visible table'|t('hommformviewer'),
-    id: 'table',
-    name: 'table',
-    value: settings['table']})
-}}
+    label: 'Allowed file types (comma separated)'|t('hommform'),
+    id: 'allowedFileTypes',
+    name: 'allowedFileTypes',
+    value: settings['allowedFileTypes'] ? settings['allowedFileTypes']|join(',') : '',
+}) }}
+
+<hr>
+
+{{ forms.autosuggestField({
+    label: 'reCAPTCHA site key'|t('hommform'),
+    id: 'recaptchaSiteKey',
+    name: 'recaptchaSiteKey',
+    value: settings['recaptchaSiteKey'],
+    suggestEnvVars: true,
+}) }}
+
+{{ forms.autosuggestField({
+    label: 'reCAPTCHA secret'|t('hommform'),
+    id: 'recaptchaSecret',
+    name: 'recaptchaSecret',
+    value: settings['recaptchaSecret'],
+    suggestEnvVars: true,
+}) }}
+
+{{ forms.rangeField({
+    label: 'reCAPTCHA score threshold'|t('hommform'),
+    id: 'recaptchaScoreThreshold',
+    name: 'recaptchaScoreThreshold',
+    value: settings['recaptchaScoreThreshold'] ?? 0.5,
+    min: 0,
+    max: 1,
+    step: 0.1,
+    instructions: 'The higher the value, the stricter the spam protection. A common default is 0.5.'|t('hommform'),
+}) }}
+
+<hr>
+
+{{ forms.autosuggestField({
+    label: 'Custom template path for HTML mails'|t('hommform'),
+    id: 'htmlMailTemplatePath',
+    instructions: 'Leave empty to use the default template'|t('hommform'),
+    name: 'htmlMailTemplatePath',
+    value: settings['htmlMailTemplatePath'],
+    suggestTemplates: true,
+}) }}
+
+{{ forms.autosuggestField({
+    label: 'Custom template path for text mails'|t('hommform'),
+    id: 'textMailTemplatePath',
+    instructions: 'Leave empty to use the default template'|t('hommform'),
+    name: 'textMailTemplatePath',
+    value: settings['textMailTemplatePath'],
+    suggestTemplates: true,
+}) }}

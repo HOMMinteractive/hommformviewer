@@ -1,53 +1,58 @@
 {# @var craft \craft\web\twig\variables\CraftVariable #}
 {#
 /**
- * HOMM Form Viewer plugin for Craft CMS 5.x
+ * HOMM Form plugin for Craft CMS 5.x
  *
- * HOMMFormViewer settings.twig
+ * HOMMForm settings.twig
  *
- * @author    Domenik Hofer
- * @copyright Copyright (c) 2019 HOMM interactive
+ * @author    Benjamin Ammann
+ * @copyright Copyright (c) 2026 HOMM interactive
  * @link      https://github.com/HOMMinteractive
- * @package   HOMMFormViewer
- * @since     1.0.0
+ * @package   HOMMForm
+ * @since     4.0.0
  */
 #}
 
 {% extends "_layouts/cp" %}
 {% import "_includes/forms" as forms %}
 
-{% do view.registerAssetBundle("homm\\hommformviewer\\assetbundles\\hommformviewercp\\HOMMFormViewerCPAsset") %}
+{% do view.registerAssetBundle("homm\\hommform\\assetbundles\\hommformcp\\HOMMFormCPAsset") %}
 
 {# The title of this CP section #}
-{% set title = "Form requests"|t('hommformviewer') %}
+{% set title = 'Form requests'|t('hommform') %}
 
-{% set formTypes = craft.hommformviewer.forms %}
-{% set currentForm = craft.app.request.getParam('form') ?? formTypes[0] %}
+{% set forms = craft.hommform.forms %}
+{% set formId = craft.app.request.getParam('formId') %}
+
+{% if not formId and forms|length %}
+    {% redirect cpUrl('hommform', { formId: forms[0] }) 302 %}
+{% endif %}
+
 
 {# Content that should appear in the page header #}
 {% block actionButton  %}
-    <input class="text search hommformviewer_search" placeholder="{{ 'Search'|t('hommformviewer') }}">
+    <input class="text search hommform_search" placeholder="{{ 'Search'|t('hommform') }}">
 
     <div class="buttons">
-        <a href="{{ cpUrl('hommformviewer/export', { form: currentForm }) }}" class="btn">{{ 'Export...'|t('hommformviewer') }}</a>
+        <a href="{{ cpUrl('hommform/export', { formId }) }}" class="btn">{{ 'Export...'|t('hommform') }}</a>
         &nbsp;
-        <form action="{{ cpUrl('hommformviewer/delete') }}" method="post" onsubmit="return confirm('{{ 'Do you really want to delete this form and all its data?\\nThis action cannot be undone.'|t('hommformviewer') }}');">
+        <form action="{{ cpUrl('hommform/delete') }}" method="post" onsubmit="return confirm('{{ 'Do you really want to delete this form and all its data?\\nThis action cannot be undone.'|t('hommform') }}');">
             {{ csrfInput() }}
-            {{ redirectInput('hommformviewer') }}
+            {{ redirectInput('hommform') }}
 
-            <input type="hidden" name="form" value="{{ currentForm }}">
-            <button class="btn submit">{{ 'Delete'|t('hommformviewer') }}</button>
+            <input type="hidden" name="form" value="{{ formId }}">
+            <button class="btn submit">{{ 'Delete'|t('hommform') }}</button>
         </form>
     </div>
 {% endblock %}
 
 {% set sidebar %}
-    <nav class="hommformviewer_nav">
+    <nav class="hommform_nav">
         <ul>
-            {% for form in formTypes %}
+            {% for fId in forms %}
                 <li>
-                    <a href="{{ cpUrl('hommformviewer', { form }) }}" class="{{ form == currentForm ? 'sel' }}">
-                        <span class="label">{{ form }}</span>
+                    <a href="{{ cpUrl('hommform', { formId: fId }) }}" class="{{ formId == fId ? 'sel' }}">
+                        <span class="label">{{ fId }}</span>
                     </a>
                 </li>
             {% endfor %}
@@ -57,44 +62,49 @@
 
 {# The content of the CP Section #}
 {% set content %}
-    {% set rows = craft.hommformviewer.data(currentForm) %}
+    {% if formId %}
+        {% set entries = craft.hommform.entries(formId) %}
 
-    <div class="hommformviewer__table">
-        <table class="data">
-            <thead>
-                <tr>
-                    {% for item in rows[:1]|first %}
-                        <th>{{ item }}</th>
-                    {% endfor %}
-                </tr>
-            </thead>
-
-            <tbody>
-                {% for row in rows[1:] %}
+        <div class="hommform__table">
+            <table class="data">
+                <thead>
                     <tr>
-                        {% for item in row %}
-                            <td>
-                                {% if item is array %}
-                                    {% for key, value in item|map(v => v is array ? v : [v]) %}
-                                        {% for key, value in value %}
-                                            {{value}},
-                                        {% endfor %}
-                                        <br>
-                                    {% endfor %}
-                                {% elseif 'http://' in item or 'https://' in item %}
-                                    <a href="{{ item }}" target="_blank" title="{{ item }}" class="table-item">{{ item }}</a>
-                                {% else %}
-                                    <span title="{{ item }}" class="table-item">{{ item }}</span>
-                                {% endif %}
-                            </td>
+                        {% for item in entries[:1]|first %}
+                            <th>{{ item }}</th>
                         {% endfor %}
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+                </thead>
 
-    <div class="hommformviewer__total">
-        <strong>{{ 'Total: {count} entries'|t('hommformviewer', { count: rows[1:]|length }) }}</strong>
-    </div>
+                <tbody>
+                    {% for row in entries[1:]|reverse %}
+                        <tr>
+                            {% for item in row %}
+                                <td>
+                                    {% if item.folder is defined and item.name is defined %}
+                                        <a href="{{ cpUrl('hommform/download/' ~ item.folder ~ '/' ~ item.name) }}" target="_blank" title="{{ item.name }}" class="table-item">{{ item.name }}</a>
+                                    {% elseif item is array %}
+                                        {% for value in item|map(v => v is array ? v : [v]) %}
+                                            {{ value|join(', ') }}<br>
+                                        {% endfor %}
+                                    {% elseif 'http://' in item or 'https://' in item %}
+                                        <a href="{{ item }}" target="_blank" title="{{ item }}" class="table-item">{{ item }}</a>
+                                    {% elseif item|first == '@' %}
+                                        <a href="{{ alias(item) }}" target="_blank" title="{{ alias(item) }}" class="table-item">{{ alias(item) }}</a>
+                                    {% else %}
+                                        <span title="{{ item }}" class="table-item">{{ item }}</span>
+                                    {% endif %}
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="hommform__total">
+            <strong>{{ 'Total: {count} entries'|t('hommform', { count: entries[1:]|length }) }}</strong>
+        </div>
+    {% else %}
+        <p>{{ 'No entries available.'|t('hommform') }}</p>
+    {% endif %}
 {% endset %}
